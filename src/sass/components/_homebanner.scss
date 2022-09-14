@@ -1,0 +1,58 @@
+$model-width: 600px;
+$model-height: 600px;
+.homebanner {
+    @include flex("space-between", "center");
+    position: relative;
+    // background-image: radial-gradient(circle at 50% 33%, #ace6ff, #26afe6 70%);
+    width: 100vw;
+    height: 650px;
+    &__left {
+        width: 50%;
+    }
+    &__right {
+        padding: 3rem;
+        width: 50%;
+        position: relative;
+        &__model {
+            position: absolute;
+            width: $model-width;
+            height: $model-height;
+            background-size: cover;
+            background-repeat: none;
+            z-index: 10;
+            right: 10%;
+        }
+        &__yellow-circle {
+            position: absolute;
+            background-size: cover;
+            width: $model-width * 1.09;
+            height: $model-height * 1.09;
+            right: 0;
+        }
+        &__green-ease-square {
+            position: absolute;
+            background-size: cover;
+            width: 400px;
+            height: 400px;
+
+            transform: translateY(-50%);
+        }
+        &__green-balloon {
+            position: absolute;
+            background-size: cover;
+            width: 100px;
+            height: 100px;
+            bottom: 5%;
+            left: 20%;
+            z-index: 11;
+        }
+        &__green-arrow {
+            position: absolute;
+            background-size: cover;
+            width: 100px;
+            height: 100px;
+            transform: rotate(340deg);
+            right: 10%;
+        }
+    }
+}

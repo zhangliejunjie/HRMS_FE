@@ -1,0 +1,40 @@
+.menu {
+    width: 300px;
+    &__btn {
+        background: #ffffff;
+        // color: var(--background);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffffff;
+    }
+    path {
+        // fill: var(--background);
+    }
+    &__ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #ffffff;
+    }
+
+    &__li {
+        // color: var(--background);
+        color: red;
+        display: block;
+    }
+
+    &__ul,
+    &__li {
+        list-style: none;
+        margin: 0;
+        padding: 10px;
+    }
+}
