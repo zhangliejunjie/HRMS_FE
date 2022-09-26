@@ -12,6 +12,7 @@ const itemVariants = {
 };
 const MyAnimateSelect = ({ content, options }) => {
     const [isOpen, setIsOpen] = useState(false);
+
     return (
         <motion.nav
             initial={false}
@@ -38,6 +39,7 @@ const MyAnimateSelect = ({ content, options }) => {
                 </motion.div>
             </motion.button>
             <motion.ul
+
                 className='menu__ul'
                 variants={{
                     open: {
@@ -59,11 +61,14 @@ const MyAnimateSelect = ({ content, options }) => {
                         }
                     }
                 }}
-                style={{ pointerEvents: isOpen ? "auto" : "none" }}
+
+                style={!isOpen ? { pointerEvents: 'none', display: 'none' } : { pointerEvents: 'auto', position: 'absolute' }}
             >
                 {
                     options.map((option) => (
-                        <motion.li key={option} className='menu__li' variants={itemVariants}>{option}</motion.li>
+                        <motion.li key={option} className='menu__li' variants={itemVariants} style={{ color: '#45CE7C' }}>
+                            {option}
+                        </motion.li>
                     ))
                 }
 

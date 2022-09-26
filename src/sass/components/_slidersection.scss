@@ -1,0 +1,58 @@
+.slider-section {
+    padding: 5rem;
+
+    // border: 1px solid black;
+    &__card-container {
+        display: flex;
+        overflow-x: scroll;
+        padding: 20px 0;
+        flex: 0 0 600px;
+        margin: 0 auto;
+    }
+}
+#progress {
+    position: relative;
+    top: 20px;
+    left: 20px;
+    transform: rotate(-90deg);
+}
+
+circle {
+    stroke-dashoffset: 0;
+    stroke-width: 15%;
+    fill: none;
+}
+
+.bg {
+    stroke: $main-green-color;
+    opacity: 0.3;
+}
+
+#progress .indicator {
+    stroke: $main-green-color;
+}
+
+::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: #fff3;
+    -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 1ex;
+}
+
+::-webkit-scrollbar-corner {
+    background: #fff3;
+}
+
+.progress-bar {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: $main-green-color;
+    transform-origin: 0%;
+}

@@ -26,3 +26,21 @@ a {
     text-decoration: none;
     color: unset;
 }
+
+.progress {
+    position: fixed;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: red;
+    bottom: 100px;
+}
+.privacy-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #45ce7c;
+    z-index: 2;
+}

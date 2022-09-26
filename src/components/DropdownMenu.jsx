@@ -31,6 +31,7 @@ const DropdownMenu = ({ content, options, color, sx }) => {
                 open={open}
                 anchorEl={anchorEl}
                 MenuListProps={{ onMouseLeave: handleClose }}
+
             >
                 {
                     options.map((option, index) => (

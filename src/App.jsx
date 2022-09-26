@@ -1,18 +1,37 @@
 import { useState } from 'react'
 import Header from './components/Header'
-import Home from './pages/Home'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Router from './routes';
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  overrides: {
+    MuiInputLabel: {
+      filled: {
+        transform: "translate(12px, 10px) scale(0.75)",
+        "&$marginDense": {
+          transform: "translate(12px, 7px) scale(0.75)"
+        }
+      },
+      outline: {
+        transform: "translate(14px, -6px) scale(0.75)"
+      }
+    }
+  }
+});
 function App() {
 
 
+
+
   return (
-    <BrowserRouter>
+
+
+    <>
       <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        {/* <Route path='/auth' element={</>}/> */}
-      </Routes>
-    </BrowserRouter>
+      <Router />
+    </>
+
   )
 }
 

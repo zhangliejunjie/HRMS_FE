@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 // mui component
 import { Box, Avatar, AppBar, Drawer, Toolbar, IconButton, Typography, ListItem, ListItemButton, ListItemText, Divider, List, SvgIcon } from '@mui/material'
 import { ReactComponent as FcodeIcon } from '../assets/logo/fcode.svg'
@@ -64,7 +65,6 @@ const Header = () => {
                 <Toolbar>
 
                     <Box sx={{ flexGrow: 1 }}>
-                        {/* <SvgIcon fontSize="50px" component={FcodeIcon} /> */}
                         <FcodeIcon style={{ width: '70px', height: '70px' }} />
                     </Box>
                     <Box sx={{ display: { md: 'flex', xs: 'none' } }}>
@@ -72,12 +72,23 @@ const Header = () => {
                             if (item.options) {
                                 return <DropdownMenu key={item.name} hover={true} color={'black'} content={item.name} options={item.options} sx={{ margin: '0 1rem', fontSize: '15px' }} />
                             } else {
-                                return <MyButton content={item.name} key={item.name} sx={{ margin: '0 1rem', fontSize: '15px', textTransform: 'none', color: 'black' }} />
+                                return <MyButton content={item.name} bgColor='#ffffff' key={item.name} sx={{ margin: '0 1rem', fontSize: '15px', textTransform: 'none', color: 'black' }} />
                             }
                         })}
                     </Box>
                     <Box sx={{ m: 2, display: { xs: 'none', md: 'block' } }}>
-                        <MyButton size='large' sx={{ color: 'white', backgroundColor: '#7DCE13', borderRadius: '10px', padding: '1 2rem' }} content='Đăng nhập' />
+                        <Link to='/auth'>
+                            <MyButton size='large'
+                                sx={{
+                                    color: 'white', borderRadius: '10px', padding: '1 2rem',
+                                    '&:hover': {
+                                        backgroundColor: '#FBC115'
+                                    }
+                                }}
+
+                                content='Đăng nhập'
+                            />
+                        </Link>
                     </Box>
                     <IconButton onClick={handleDrawerToggle} sx={{ mr: 2, display: { md: 'none', sm: 'block' } }}
                     >
@@ -91,7 +102,7 @@ const Header = () => {
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
+                        keepMounted: true,
                     }}
                     sx={{
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
