@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+
 // mui component
 import { Box, Avatar, AppBar, Drawer, Toolbar, IconButton, Typography, ListItem, ListItemButton, ListItemText, Divider, List, SvgIcon } from '@mui/material'
 import { ReactComponent as FcodeIcon } from '../assets/logo/fcode.svg'
@@ -32,7 +33,9 @@ const navItems = [
     }
 ]
 const drawerWidth = 240;
-const Header = () => {
+const Header = ({ member }) => {
+
+    console.log(member);
     const [mobileOpen, setMobileOpen] = useState(false)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen)
@@ -65,7 +68,9 @@ const Header = () => {
                 <Toolbar>
 
                     <Box sx={{ flexGrow: 1 }}>
-                        <FcodeIcon style={{ width: '70px', height: '70px' }} />
+                        <Link to='/'>
+                            <FcodeIcon style={{ width: '70px', height: '70px' }} />
+                        </Link>
                     </Box>
                     <Box sx={{ display: { md: 'flex', xs: 'none' } }}>
                         {navItems.map((item) => {

@@ -1,5 +1,7 @@
 import { motion, useIsPresent, useScroll, useSpring } from 'framer-motion'
 import React, { useState } from 'react'
+import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { InputAdornment, InputLabel, Divider, Chip } from '@mui/material'
 // import fcode from '../assets/utils/fcode.png'
 import PropTypes from 'prop-types'
@@ -13,16 +15,27 @@ import MyButton from '../components/MyButton'
 
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { login } from '../store/slice/userSlice';
 
 const Access = props => {
-    // const { scrollYProgress } = useScroll();
-    // const scaleX = useSpring(scrollYProgress, {
-    //     stiffness: 100,
-    //     damping: 30,
-    //     restDelta: 0.001
-    // });
     const isPresent = useIsPresent();
+    const dispatch = useDispatch()
     const [isLogin, setIsLogin] = useState(true)
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        onSubmit: async (values) => {
+            if (isLogin) {
+                // dang nhap ben redux
+                const res = await dispatch(login(values))
+                console.log(res);
+            }
+        }
+    })
+
+
     return (
         <>
             <div className='access' style={{
@@ -49,86 +62,95 @@ const Access = props => {
                     // }}
 
                     />
-                    <img src={iphone} alt="" width={200} />
-                    <img src={ipad} alt="" width={200} />
+                    {/* <img src={iphone} alt="" width={200} /> */}
+                    {/* <img src={ipad} alt="" width={200} /> */}
                 </div>
                 <div className="access__right">
-                    <div className='access__right__form'>
-                        <h1>{isLogin ? 'Đăng nhập' : 'Đăng ký'}</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores vitae suscipit.</p>
-                        <MyInput
-                            placeholder='example@gmail.com'
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <AccountCircleIcon style={{ color: '#111111' }} />
-                                </InputAdornment>
-                            }
-                        />
-                        <MyInput
-                            placeholder='example@123'
-                            type='password'
-
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <VpnKeyIcon style={{ color: '#111111' }} />
-                                </InputAdornment>
-
-                            }
-                        />
-                        {
-                            !isLogin && <MyInput
+                    <form onSubmit={formik.handleSubmit}>
+                        <div className='access__right__form'>
+                            <h1>{isLogin ? 'Đăng nhập' : 'Đăng ký'}</h1>
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores vitae suscipit.</p>
+                            <MyInput
+                                name='email'
+                                placeholder='example@gmail.com'
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <AccountCircleIcon style={{ color: '#111111' }} />
+                                    </InputAdornment>
+                                }
+                                onChange={formik.handleChange}
+                                value={formik.values.email}
+                            />
+                            <MyInput
                                 placeholder='example@123'
                                 type='password'
-                                // label={
-                                //     <InputLabel color='error'>asdad</InputLabel>
-                                // }
+                                name='password'
                                 startAdornment={
                                     <InputAdornment position="start">
                                         <VpnKeyIcon style={{ color: '#111111' }} />
                                     </InputAdornment>
 
                                 }
+                                onChange={formik.handleChange}
+                                value={formik.values.password}
                             />
-                        }
-                        {
-                            isLogin && <>
-                                <p style={{
-                                    textAlign: 'left'
-                                }}>
-                                    Quên mật khẩu ? Nhấn vào đây để
-                                    <span style={{
-                                        color: '#FBC115',
-                                        cursor: 'pointer'
-                                    }}> reset</span>
-                                </p>
+                            {
+                                !isLogin && <MyInput
+                                    placeholder='example@123'
+                                    type='password'
+                                    // label={
+                                    //     <InputLabel color='error'>asdad</InputLabel>
+                                    // }
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <VpnKeyIcon style={{ color: '#111111' }} />
+                                        </InputAdornment>
 
-                                <Divider sx={{ width: '100%' }}>
-                                    <Chip label='hoặc' />
-                                </Divider>
-                            </>
-                        }
-                        <p style={{
-                            textAlign: 'left'
-                        }}>
-                            {`${isLogin ? 'Chưa' : 'Đã'}`} có tài khoản ? Nhấn vào đây để
-                            <span style={{
-                                color: '#FBC115',
-                                cursor: 'pointer'
-                            }} onClick={() => setIsLogin(!isLogin)}>{isLogin ? ' đăng ký' : ' đăng nhập'}</span>
-                        </p>
-                        <MyButton
-                            content={`${isLogin ? 'Đăng nhập' : 'Đăng ký'}`}
-                            size='large' bgColor='#FBC115'
-                            sx={{
-                                color: '#ffffff',
-                                borderRadius: '10px',
-                                '&:hover': {
-                                    backgroundColor: '#45CE7C'
-                                }
-                            }}
+                                    }
+                                />
+                            }
+                            {
+                                isLogin && <>
+                                    <p style={{
+                                        textAlign: 'left'
+                                    }}>
+                                        Quên mật khẩu ? Nhấn vào đây để
+                                        <span style={{
+                                            color: '#FBC115',
+                                            cursor: 'pointer'
+                                        }}> reset</span>
+                                    </p>
 
-                        />
-                    </div>
+                                    <Divider sx={{ width: '100%' }}>
+                                        <Chip label='hoặc' />
+                                    </Divider>
+                                </>
+                            }
+                            <p style={{
+                                textAlign: 'left'
+                            }}>
+                                {`${isLogin ? 'Chưa' : 'Đã'}`} có tài khoản ? Nhấn vào đây để
+                                <span style={{
+                                    color: '#FBC115',
+                                    cursor: 'pointer'
+                                }} onClick={() => setIsLogin(!isLogin)}>{isLogin ? ' đăng ký' : ' đăng nhập'}</span>
+                            </p>
+                            <MyButton
+                                type='submit'
+                                content={`${isLogin ? 'Đăng nhập' : 'Đăng ký'}`}
+                                size='large' bgColor='#FBC115'
+                                sx={{
+                                    color: '#ffffff',
+                                    borderRadius: '10px',
+                                    '&:hover': {
+                                        backgroundColor: '#45CE7C'
+                                    }
+                                }}
+
+                            />
+                        </div>
+
+                    </form>
                 </div>
 
 

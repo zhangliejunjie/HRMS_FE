@@ -35,7 +35,7 @@ const DropdownMenu = ({ content, options, color, sx }) => {
             >
                 {
                     options.map((option, index) => (
-                        <MenuItem key={index}>{option}</MenuItem>
+                        <MenuItem sx={{ width: '180px' }} key={index}>{option}</MenuItem>
                     ))
                 }
             </Menu>

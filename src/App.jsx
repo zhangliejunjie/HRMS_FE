@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Router from './routes';
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from 'react-redux';
+import { userIsAuth } from './store/slice/userSlice';
 
 const theme = createTheme({
   overrides: {
@@ -21,14 +23,18 @@ const theme = createTheme({
 });
 function App() {
 
-
+  const member = useSelector(state => state.user);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(userIsAuth())
+  }, [dispatch])
 
 
   return (
 
 
     <>
-      <Header />
+      <Header member={member} />
       <Router />
     </>
 
