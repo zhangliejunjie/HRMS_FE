@@ -2,16 +2,22 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 
 // mui component
-import { Box, Avatar, AppBar, Drawer, Toolbar, IconButton, Typography, ListItem, ListItemButton, ListItemText, Divider, List, SvgIcon } from '@mui/material'
+import { Box, Avatar, AppBar, Drawer, Toolbar, IconButton, Typography, ListItem, ListItemButton, ListItemText, Divider, List, SvgIcon, Tooltip, Menu, MenuItem, ListItemIcon } from '@mui/material'
 import { ReactComponent as FcodeIcon } from '../assets/logo/fcode.svg'
 // mui icon
 import MenuIcon from '@mui/icons-material/Menu';
 
-
+import MarkunreadIcon from "@mui/icons-material/Markunread"
+import PublicIcon from "@mui/icons-material/Public"
+import HomeIcon from "@mui/icons-material/Home"
+import ViewModuleOutlinedIcon from '@mui/icons-material/ViewModuleOutlined';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
 
 import DropdownMenu from './DropdownMenu'
 import MyButton from './MyButton';
 import CollapseList from './CollapseList';
+import { useSelector } from 'react-redux';
 const navItems = [
     {
         name: 'Vị trí ứng tuyển',
@@ -24,21 +30,61 @@ const navItems = [
         link: '/about'
     },
     {
-        name: 'Tra cứu kết quả',
-        link: '/about'
+        name: 'Công việc khả dụng',
+        link: '/job'
     },
     {
         name: 'Câu hỏi thường gặp',
         link: '/qa'
     }
 ]
+const paperPropsAvatar = {
+    elevation: 0,
+    sx: {
+        overflow: "visible",
+        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+        mt: 1.5,
+        "& .MuiAvatar-root": {
+            width: 32,
+            height: 32,
+            ml: -0.5,
+            mr: 1,
+        },
+        "&:before": {
+            content: '""',
+            display: "block",
+            position: "absolute",
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: "background.paper",
+            transform: "translateY(-50%) rotate(45deg)",
+            zIndex: 0,
+        },
+    },
+}
 const drawerWidth = 240;
-const Header = ({ member }) => {
+const Header = () => {
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
 
-    console.log(member);
+    const { member, auth } = useSelector((state) => {
+
+        return state.user
+    })
+
+
     const [mobileOpen, setMobileOpen] = useState(false)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen)
+    }
+    function popupAvatar(e) {
+        setAnchorEl(e.currentTarget)
+        // console.log(anchorEl)
+    }
+    function closePopup() {
+        setAnchorEl(null)
     }
     const drawer = (
         <Box sx={{ textAlign: 'center' }}>
@@ -77,13 +123,56 @@ const Header = ({ member }) => {
                             if (item.options) {
                                 return <DropdownMenu key={item.name} hover={true} color={'black'} content={item.name} options={item.options} sx={{ margin: '0 1rem', fontSize: '15px' }} />
                             } else {
-                                return <MyButton content={item.name} bgColor='#ffffff' key={item.name} sx={{ margin: '0 1rem', fontSize: '15px', textTransform: 'none', color: 'black' }} />
+                                return <MyButton content={<Link to={item.link}>{item.name}</Link>} bgColor='#ffffff' key={item.name} sx={{ margin: '0 1rem', fontSize: '15px', textTransform: 'none', color: 'black' }} />
                             }
                         })}
                     </Box>
                     <Box sx={{ m: 2, display: { xs: 'none', md: 'block' } }}>
-                        <Link to='/auth'>
-                            <MyButton size='large'
+
+                        {
+                            auth ? <>
+                                <Tooltip title="Account settings">
+                                    <IconButton sx={{ p: 0 }} onClick={popupAvatar}>
+                                        <Avatar src={member.avatar} alt={member.fullname} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClick={closePopup}
+                                    onClose={closePopup}
+                                    PaperProps={paperPropsAvatar}
+                                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                                >
+                                    <MenuItem>
+                                        <Avatar />
+                                        <Link to='/profile'>Profile</Link>
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <ViewModuleOutlinedIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        {/* Collections */}
+                                        <Link to='/collection'>Collections</Link>
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <Settings fontSize="small" />
+                                        </ListItemIcon>
+                                        Settings
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem>
+                                        <ListItemIcon>
+                                            <Logout fontSize="small" />
+                                        </ListItemIcon>
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
+                            </> : <Link to='/auth'><MyButton size='large'
                                 sx={{
                                     color: 'white', borderRadius: '10px', padding: '1 2rem',
                                     '&:hover': {
@@ -92,8 +181,10 @@ const Header = ({ member }) => {
                                 }}
 
                                 content='Đăng nhập'
-                            />
-                        </Link>
+                            />  </Link>
+                        }
+
+
                     </Box>
                     <IconButton onClick={handleDrawerToggle} sx={{ mr: 2, display: { md: 'none', sm: 'block' } }}
                     >

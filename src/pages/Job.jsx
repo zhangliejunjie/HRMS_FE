@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import JobCard from '../components/JobCard'
-import { Pagination } from '@mui/material'
+import { Pagination, Typography } from '@mui/material'
 import bg from '../assets/utils/bg.png'
+import MyButton from '../components/MyButton'
 const jobList = [
     {
         id: 'j01',
@@ -91,11 +92,11 @@ const Job = () => {
                 }}
             >
                 <div className="job-container__left">
-                    <h5>Job  Openings</h5>
-                    <p>Let's find a suitable position to start your
+                    <h1>Job  Openings</h1>
+                    <Typography variant='h5'>Let's find a suitable position to start your
                         Fresher journey with FCode!
-                    </p>
-                    <button>See all Fresher jobs</button>
+                    </Typography>
+                    <MyButton content={"Tìm việc"} />
                 </div>
                 <div className="job-container__right">
                     <div className="job-container__right__job-card">

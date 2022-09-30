@@ -4,8 +4,8 @@ import Router from './routes';
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from 'react-redux';
-import { userIsAuth } from './store/slice/userSlice';
-
+import { userIsAuth } from './store/reducers/userSlice';
+import { auth } from './store/reducers/userSlice'
 const theme = createTheme({
   overrides: {
     MuiInputLabel: {
@@ -26,7 +26,11 @@ function App() {
   const member = useSelector(state => state.user);
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(userIsAuth())
+    let data = localStorage.getItem('persist:root')
+    data = JSON.parse(data);
+    const userDispatch = JSON.parse(data.user)
+    console.log(userDispatch);
+    dispatch(auth(userDispatch))
   }, [dispatch])
 
 
@@ -34,7 +38,7 @@ function App() {
 
 
     <>
-      <Header member={member} />
+      <Header />
       <Router />
     </>
 

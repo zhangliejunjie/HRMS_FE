@@ -14,14 +14,15 @@ export const login = createAsyncThunk(
         password: params.password,
       }
     );
-    const { member } = res.data;
-    console.log(member);
-    return member;
+    console.log(res.data);
+    const { member, token } = res.data;
+
+    return { member, token };
   }
 );
 export const userIsAuth = createAsyncThunk("user/auth", async () => {
   if (!getTokenCookie()) {
-    console.log("dont have cookie");
+    // console.log("dont have cookie");
     throw new Error();
   }
   const user = await axios.get(
@@ -30,6 +31,35 @@ export const userIsAuth = createAsyncThunk("user/auth", async () => {
   );
   return user.data.member;
 });
+
+export const register = createAsyncThunk(
+  "user/register",
+  async (params, thunkAPI) => {
+    const res = await axios.post(
+      "http://localhost:8000/api/member-auth/register",
+      {
+        email: params.email,
+        password: params.password,
+        fullname: params.fullname,
+      }
+    );
+    console.log(res.data);
+    const { member, token } = res.data;
+
+    return { member, token };
+  }
+);
+export const update = createAsyncThunk(
+  "user/update",
+  async (params, thunkAPI) => {
+    const res = await axios.patch(
+      "http://localhost:8000/api/member/profile",
+      params.data,
+      { headers: { Authorization: `Bearer ${params.token}` } }
+    );
+    return res.data;
+  }
+);
 const initialState = {
   member: {
     id: null,
@@ -40,6 +70,7 @@ const initialState = {
     current_resume_url: null,
     status: "Inactive",
   },
+  token: null,
   auth: false,
   loading: false,
   error: "",
@@ -49,10 +80,10 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // auth: (state, action) => {
-    //   state.member = action.payload.member;
-    //   state.auth = action.payload.auth;
-    // },
+    auth: (state, action) => {
+      state.member = action.payload.member;
+      state.auth = action.payload.auth;
+    },
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -65,7 +96,8 @@ const userSlice = createSlice({
     },
     [login.fulfilled]: (state, action) => {
       state.loading = false;
-      state.member = action.payload;
+      state.member = action.payload.member;
+      state.token = action.payload.token;
       state.auth = true;
     },
     [userIsAuth.pending]: (state) => {
@@ -81,8 +113,37 @@ const userSlice = createSlice({
       state.member = action.payload;
       state.auth = true;
     },
+    [register.pending]: (state) => {
+      state.loading = true;
+    },
+    [register.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+      state.auth = false;
+    },
+    [register.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.member = action.payload.member;
+      state.token = action.payload.token;
+      state.auth = true;
+    },
+    [update.pending]: (state) => {
+      state.loading = true;
+    },
+    [update.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    },
+    [update.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.member = action.payload;
+      state.auth = true;
+    },
   },
 });
 
 const { reducer: userReducer } = userSlice;
+
+export const { auth } = userSlice.actions;
+
 export default userReducer;
