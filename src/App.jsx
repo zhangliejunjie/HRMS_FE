@@ -23,15 +23,7 @@ const theme = createTheme({
 });
 function App() {
 
-  const member = useSelector(state => state.user);
-  const dispatch = useDispatch()
-  useEffect(() => {
-    let data = localStorage.getItem('persist:root')
-    data = JSON.parse(data);
-    const userDispatch = JSON.parse(data.user)
-    console.log(userDispatch);
-    dispatch(auth(userDispatch))
-  }, [dispatch])
+
 
 
   return (

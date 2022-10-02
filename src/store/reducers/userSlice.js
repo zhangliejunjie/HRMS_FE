@@ -3,21 +3,31 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getTokenCookie, getAuthHeader } from "../../utils/tool";
 axios.defaults.headers.post["Content-Type"] = "application/json";
+import { success, error } from "./notificationSlice";
 
 export const login = createAsyncThunk(
   "user/login",
   async (params, thunkAPI) => {
-    const res = await axios.post(
-      "http://localhost:8000/api/member-auth/login",
-      {
-        email: params.email,
-        password: params.password,
-      }
-    );
-    console.log(res.data);
-    const { member, token } = res.data;
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/member-auth/login",
+        {
+          email: params.email,
+          password: params.password,
+        }
+      );
 
-    return { member, token };
+      const { member, token } = res.data;
+      if (token) {
+        await thunkAPI.dispatch(success("Đăng nhập thành công"));
+      }
+
+      return { member, token };
+    } catch (err) {
+      console.log(err);
+      await thunkAPI.dispatch(error(err.response.data.message));
+      // reject("Error with user login");
+    }
   }
 );
 export const userIsAuth = createAsyncThunk("user/auth", async () => {

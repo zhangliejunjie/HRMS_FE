@@ -10,9 +10,11 @@ import {
   REGISTER,
 } from "redux-persist";
 import userReducer from "./reducers/userSlice";
+import notificationReducer from "./reducers/notificationSlice";
 import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   user: userReducer,
+  notification: notificationReducer,
 });
 const persistConfig = {
   key: "root",

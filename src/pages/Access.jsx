@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { InputAdornment, InputLabel, Divider, Chip, Stack } from '@mui/material'
+import { InputAdornment, InputLabel, Divider, Chip, Stack, TextField, FormHelperText } from '@mui/material'
 // import fcode from '../assets/utils/fcode.png'
 import PropTypes from 'prop-types'
 import computer from '../assets/utils/MacBook.png'
@@ -18,13 +18,14 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { login, register } from '../store/reducers/userSlice';
 import { useEffect } from 'react';
-
+import * as Yup from 'yup'
+import { errorHelper } from '../utils/tool';
 const Access = props => {
     let nav = useNavigate()
     const isPresent = useIsPresent();
     const dispatch = useDispatch()
     const { auth } = useSelector(state => state.user)
-
+    // const { error } = useSelector(state => state.notifications)
     const [isLogin, setIsLogin] = useState(true)
     const formik = useFormik({
         initialValues: {
@@ -33,20 +34,21 @@ const Access = props => {
             confirmPassword: '',
             fullname: '',
         },
+        validationSchema: Yup.object().shape({
+            email: Yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
+            password: Yup.string().min(6, 'Mật khẩu phải nhiều hơn 6 kí tự.').max(200, 'Mật khẩu phải ít hơn 200 kí tự').required('Mật khẩu không được bỏ trống'),
+            confirmPassword: !isLogin && Yup.string().min(6, 'Mật khẩu phải nhiều hơn 6 kí tự.').max(200, 'Mật khẩu phải ít hơn 200 kí tự').required().oneOf([Yup.ref('password'), null], "Mật khẩu xác nhận phải trùng khớp"),
+            fullname: !isLogin && Yup.string().min(6, 'Họ và tên người dùng phải dài hơn 6 kí tự.').required('Họ và tên không được bỏ trống')
+        }),
         onSubmit: (values) => {
             if (isLogin) {
                 // dang nhap ben redux
                 const { email, password } = values
-                dispatch(login({ email, password })).then(
-                    nav('/')
-                )
+                dispatch(login({ email, password }))
 
             } else {
-                const { email, password, fullname, confirmPassword } = values
-                if (password !== confirmPassword) {
-                    alert('confirm password is wrong')
-                    return;
-                }
+                const { email, password, fullname } = values
+
 
                 dispatch(register({ email, password, fullname })).then(
                     nav('/')
@@ -56,10 +58,11 @@ const Access = props => {
         }
     })
     useEffect(() => {
-        if (auth) {
+
+        if (auth === true) {
             nav('/')
         }
-    }, [])
+    }, [auth])
     return <>
         <div className='access' style={{
             backgroundImage: `url(${bg})`,
@@ -89,63 +92,82 @@ const Access = props => {
                 {/* <img src={ipad} alt="" width={200} /> */}
             </div>
             <div className="access__right">
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={(e) => { e.preventDefault(); formik.handleSubmit(e) }}>
                     <div className='access__right__form'>
                         <h1>{isLogin ? 'Đăng nhập' : 'Đăng ký'}</h1>
                         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores vitae suscipit.</p>
-                        <MyInput
+                        <TextInput
                             name='email'
                             placeholder='example@gmail.com'
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <AccountCircleIcon style={{ color: '#111111' }} />
-                                </InputAdornment>
-                            }
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AccountCircleIcon style={{ color: '#111111' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+
+                            {...formik.getFieldProps('email')}
+                            {...errorHelper(formik, 'email')}
                             onChange={formik.handleChange}
                             value={formik.values.email}
+                            color="success"
                         />
+
                         {
-                            !isLogin && <MyInput
+                            !isLogin && <TextInput
                                 name="fullname"
                                 placeholder='Nguyen Van A'
                                 onChange={formik.handleChange}
                                 value={formik.values.fullname}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <InsertEmoticonIcon style={{ color: '#111111' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                                {...formik.getFieldProps('fullname')}
+                                {...errorHelper(formik, 'fullname')}
+                                color="success"
 
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <InsertEmoticonIcon style={{ color: '#111111' }} />
-                                    </InputAdornment>
-
-                                }
                             />
                         }
-                        <MyInput
+                        <TextInput
                             placeholder='example@123'
                             type='password'
                             name='password'
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <VpnKeyIcon style={{ color: '#111111' }} />
-                                </InputAdornment>
 
-                            }
+                            color="success"
+
+
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <VpnKeyIcon style={{ color: '#111111' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+                            {...formik.getFieldProps('password')}
+                            {...errorHelper(formik, 'password')}
                             onChange={formik.handleChange}
                             value={formik.values.password}
                         />
                         {
-                            !isLogin && <MyInput
+                            !isLogin && <TextInput
                                 name="confirmPassword"
                                 placeholder='example@123'
                                 type='password'
-                                // label={
-                                //     <InputLabel color='error'>asdad</InputLabel>
-                                // }
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <VpnKeyIcon style={{ color: '#111111' }} />
-                                    </InputAdornment>
-
-                                }
+                                color="success"
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <VpnKeyIcon style={{ color: '#111111' }} />
+                                        </InputAdornment>
+                                    )
+                                }}
+                                {...formik.getFieldProps('confirmPassword')}
+                                {...errorHelper(formik, 'confirmPassword')}
                                 onChange={formik.handleChange}
                                 value={formik.values.confirmPassword}
 

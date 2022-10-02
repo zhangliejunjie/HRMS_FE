@@ -9,6 +9,7 @@ const MyButton = ({ content, sx, size, bgColor = '#45CE7C', ...rest }) => {
 
     return (
         <Button
+            // onClick={(e) => e.preventDefault()}
             size={size}
             sx={{ textTransform: 'none', bgcolor: bgColor, ...sx }}
             {...rest}
