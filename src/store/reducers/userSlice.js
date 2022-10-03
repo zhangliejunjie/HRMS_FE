@@ -1,9 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // axios
 import axios from "axios";
-import { getTokenCookie, getAuthHeader } from "../../utils/tool";
+import storage from "redux-persist/lib/storage";
+import {
+  getTokenCookie,
+  getAuthHeader,
+  removeTokenCookie,
+} from "../../utils/tool";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
+
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (params, thunkAPI) => {
+    try {
+      removeTokenCookie();
+      // localStorage.removeItem('')
+      storage.removeItem("persist:root");
+
+      await thunkAPI.dispatch(success("Good bye"));
+    } catch (error) {
+      await thunkAPI.dispatch(error(error.message));
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   "user/login",
@@ -148,6 +168,18 @@ const userSlice = createSlice({
       state.loading = false;
       state.member = action.payload;
       state.auth = true;
+    },
+    [logout.pending]: (state) => {
+      state.loading = true;
+    },
+    [logout.rejected]: (state) => {
+      state.loading = false;
+      state.auth = true;
+    },
+    [logout.fulfilled]: (state) => {
+      state.loading = false;
+      state.member = initialState.member;
+      state.auth = false;
     },
   },
 });

@@ -17,7 +17,8 @@ import Logout from '@mui/icons-material/Logout';
 import DropdownMenu from './DropdownMenu'
 import MyButton from './MyButton';
 import CollapseList from './CollapseList';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../store/reducers/userSlice';
 const navItems = [
     {
         name: 'Vị trí ứng tuyển',
@@ -68,7 +69,7 @@ const drawerWidth = 240;
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
-
+    const dispatch = useDispatch()
     const { member, auth } = useSelector((state) => {
 
         return state.user
@@ -165,7 +166,7 @@ const Header = () => {
                                         Settings
                                     </MenuItem>
                                     <Divider />
-                                    <MenuItem>
+                                    <MenuItem onClick={() => dispatch(logout())}>
                                         <ListItemIcon>
                                             <Logout fontSize="small" />
                                         </ListItemIcon>

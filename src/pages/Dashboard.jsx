@@ -64,7 +64,7 @@ const Dashboard = () => {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, borderColor: 'divider' }}
             >
-                <Tab label="Thông tin cá nhân" {...a11yProps(0)} />
+                <Tab label="Thông tin chungg" {...a11yProps(0)} />
                 <Divider />
                 <Tab label="Kết quả phỏng vấn" {...a11yProps(1)} />
                 <Divider />

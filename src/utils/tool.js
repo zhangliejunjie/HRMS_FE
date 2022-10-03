@@ -5,12 +5,12 @@ export const showToast = (type, message) => {
   switch (type) {
     case "success":
       toast.success(message, {
-        position: toast.POSITION.BOTTOM_LEFT,
+        position: toast.POSITION.TOP_RIGHT,
       });
       break;
     case "error":
       toast.error(message, {
-        position: toast.POSITION.BOTTOM_LEFT,
+        position: toast.POSITION.TOP_RIGHT,
       });
       break;
     default:

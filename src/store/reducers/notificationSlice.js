@@ -15,13 +15,13 @@ const notificationSlice = createSlice({
   reducers: {
     success: (state, action) => {
       state.message = action.payload;
-      state.error = true;
-      state.success = false;
+      state.error = false;
+      state.success = true;
     },
     error: (state, action) => {
       state.message = action.payload;
-      state.error = false;
-      state.success = true;
+      state.error = true;
+      state.success = false;
     },
   },
 });
