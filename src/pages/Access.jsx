@@ -45,7 +45,6 @@ const Access = props => {
                 // dang nhap ben redux
                 const { email, password } = values
                 dispatch(login({ email, password }))
-
             } else {
                 const { email, password, fullname } = values
 

@@ -1,19 +1,33 @@
 import React, { useState, useRef, createRef } from 'react'
+
+
+// mui
 import { Button, Box, Avatar, ListItemText, ListItemButton, Typography, AppBar, Tabs, Tab, Container, Stack, TextField } from '@mui/material'
+
+//redux
 import { useSelector, useDispatch } from 'react-redux'
+import { update } from '../store/reducers/userSlice';
 import axios from 'axios'
+//icon
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import MyButton from './MyButton';
+
+//component
 import TextInput from './TextInput';
+import ProfilePDF from './ProfilePDF';
+//form
 import { useFormik } from 'formik';
-import { update } from '../store/reducers/userSlice';
+
+import * as Yup from 'yup'
 // Họ và tên
 // Email
 // Số điện thoại 
 // Địa chỉ
 const ProfileShow = () => {
     const { member, token } = useSelector(state => state.user)
+    const [show, setShow] = useState(false)
     const dispatch = useDispatch()
     // cons
     const formik = useFormik({
@@ -24,6 +38,10 @@ const ProfileShow = () => {
             address: 'Phước Long A, phường Long Thạnh Mỹ, Q9, TPHCM',
             avatar: member.avatar
         },
+        validationSchema: Yup.object().shape({
+            fullname: Yup.string().min(6, 'Họ và tên người dùng phải dài hơn 6 kí tự.').required('Họ và tên không được bỏ trống'),
+            email: Yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
+        }),
         onSubmit: (values) => {
             const { fullname, email } = values
 
@@ -35,7 +53,7 @@ const ProfileShow = () => {
                 },
                 token: token
             }
-            // console.log(submitObj);
+
             dispatch(update(params)).then(
                 alert('Update thanh cong')
             )
@@ -86,7 +104,7 @@ const ProfileShow = () => {
                                 borderRadius: '10px'
                             }}
                             alt={member.fullname}
-                            src={member.avatar}
+                            src={!image ? member.avatar : image}
                             variant='square'
                             imgProps={{
                                 style: {
@@ -128,7 +146,9 @@ const ProfileShow = () => {
                         <form onSubmit={formik.handleSubmit}>
                             <Stack>
                                 <Typography>Họ và tên:</Typography>
-                                <TextInput name="fullname" disabled={disabledInput} onChange={formik.handleChange} value={formik.values.fullname} />
+                                <TextInput name="fullname"
+                                    disabled={disabledInput} onChange={formik.handleChange} value={formik.values.fullname}
+                                />
                             </Stack>
                             <Stack mt={2}>
                                 <Typography>Email:</Typography>
@@ -170,6 +190,7 @@ const ProfileShow = () => {
                             </Stack>
                         </form>
 
+                        <ProfilePDF />
                     </Box>
                 </Box>
             </Box>
