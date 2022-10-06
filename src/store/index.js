@@ -12,9 +12,11 @@ import {
 import userReducer from "./reducers/userSlice";
 import notificationReducer from "./reducers/notificationSlice";
 import storage from "redux-persist/lib/storage";
+import jobReducer from "./reducers/jobSlice";
 const rootReducer = combineReducers({
   user: userReducer,
   notification: notificationReducer,
+  job: jobReducer,
 });
 const persistConfig = {
   key: "root",

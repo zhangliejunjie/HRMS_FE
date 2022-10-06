@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { Document, Page, pdfjs } from 'react-pdf';
-import myPdf from '../../1.pdf'
 import { Button, Box } from '@mui/material'
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import { Document, Page, pdfjs } from 'react-pdf';
+
+
 
 const PDFView = ({ pdf }) => {
+
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     function onDocumentLoadSuccess({ numPages }) {
@@ -24,13 +26,13 @@ const PDFView = ({ pdf }) => {
     }
 
     return (
-        <Box >
-            <Box>
-                <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page size="A1" pageNumber={pageNumber} sx={{ width: '100%' }} />
-                </Document>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-            </Box>
+            <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+                <Page size="A2" pageNumber={pageNumber} sx={{ width: '100%' }} />
+            </Document>
+
+
             <Box>
                 {
                     numPages && <p style={{ textAlign: 'center' }}> Page {pageNumber} of {numPages}</p>

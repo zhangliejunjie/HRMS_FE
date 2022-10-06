@@ -17,10 +17,12 @@ import MyButton from './MyButton';
 //component
 import TextInput from './TextInput';
 import ProfilePDF from './ProfilePDF';
+import { errorHelper } from '../utils/tool';
 //form
 import { useFormik } from 'formik';
 
 import * as Yup from 'yup'
+import { success } from '../store/reducers/notificationSlice';
 // Họ và tên
 // Email
 // Số điện thoại 
@@ -29,18 +31,23 @@ const ProfileShow = () => {
     const { member, token } = useSelector(state => state.user)
     const [show, setShow] = useState(false)
     const dispatch = useDispatch()
+    const [image, setImage] = useState(undefined);
+    const inputFileRef = createRef(null);
+    const [disabledInput, setDisableInput] = useState(true)
     // cons
     const formik = useFormik({
         initialValues: {
             fullname: member.fullname,
             email: member.email,
-            phone: '0399716348',
-            address: 'Phước Long A, phường Long Thạnh Mỹ, Q9, TPHCM',
-            avatar: member.avatar
+            // phone: member.phone,
+            address: member.address ? member.address : "Trống",
+            phone: member.phone ? member.phone : "Trống"
         },
         validationSchema: Yup.object().shape({
             fullname: Yup.string().min(6, 'Họ và tên người dùng phải dài hơn 6 kí tự.').required('Họ và tên không được bỏ trống'),
             email: Yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
+            address: Yup.string(),
+            phone: Yup.string().min(10).max(13)
         }),
         onSubmit: (values) => {
             const { fullname, email } = values
@@ -54,16 +61,16 @@ const ProfileShow = () => {
                 token: token
             }
 
-            dispatch(update(params)).then(
-                alert('Update thanh cong')
-            )
+            dispatch(update(params))
+                .then(() => {
+                    dispatch(success('Update thành công'));
+                    setDisableInput(true)
+                })
 
 
         }
     })
-    const [image, setImage] = useState(undefined);
-    const inputFileRef = createRef(null);
-    const [disabledInput, setDisableInput] = useState(true)
+
     const handleOnChange = (files) => {
         const formData = new FormData()
         formData.append("file", files[0])
@@ -117,7 +124,7 @@ const ProfileShow = () => {
                             />
                             <input
                                 ref={inputFileRef}
-                                accept="image/*"
+                                accept="image/png, image/jpg, image/jpeg, image/gif"
                                 hidden
                                 id="avatar-image-upload"
                                 type="file"
@@ -148,20 +155,31 @@ const ProfileShow = () => {
                                 <Stack>
                                     <Typography>Họ và tên:</Typography>
                                     <TextInput name="fullname"
-                                        disabled={disabledInput} onChange={formik.handleChange} value={formik.values.fullname}
+                                        disabled={disabledInput}
+                                        {...formik.getFieldProps('fullname')}
+                                        {...errorHelper(formik, 'fullname')}
                                     />
                                 </Stack>
                                 <Stack mt={2}>
                                     <Typography>Email:</Typography>
-                                    <TextInput name="email" disabled={disabledInput} onChange={formik.handleChange} value={formik.values.email} />
+                                    <TextInput name="email" disabled={disabledInput}
+                                        {...formik.getFieldProps('email')}
+                                        {...errorHelper(formik, 'email')}
+                                    />
                                 </Stack>
                                 <Stack mt={2}>
                                     <Typography>Số điện thoại:</Typography>
-                                    <TextInput name="phone" disabled={disabledInput} onChange={formik.handleChange} value={formik.values.phone} />
+                                    <TextInput name="phone" disabled={disabledInput}
+                                        {...formik.getFieldProps('phone')}
+                                        {...errorHelper(formik, 'phone')}
+                                    />
                                 </Stack>
                                 <Stack mt={2}>
                                     <Typography>Địa chỉ:</Typography>
-                                    <TextInput name="address" disabled={disabledInput} multiline onChange={formik.handleChange} value={formik.values.address} />
+                                    <TextInput name="address" disabled={disabledInput} multiline
+                                        {...formik.getFieldProps('address')}
+                                        {...errorHelper(formik, 'address')}
+                                    />
                                 </Stack>
                                 <Stack direction="row" justifyContent='space-between' mt={2} >
                                     <MyButton
@@ -198,7 +216,7 @@ const ProfileShow = () => {
                     <Typography component='h1' variant='h4'>
                         Thông tin CV
                     </Typography>
-                    <ProfilePDF />
+                    <ProfilePDF member={member} token={token} />
                 </Box>
             </Stack>
         </Box >
