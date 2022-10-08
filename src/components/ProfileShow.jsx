@@ -40,14 +40,14 @@ const ProfileShow = () => {
             fullname: member.fullname,
             email: member.email,
             // phone: member.phone,
-            address: member.address ? member.address : "Trống",
-            phone: member.phone ? member.phone : "Trống"
+            address: member.address ? member.address : "Cần cập nhật thông tin",
+            phone: member.phone ? member.phone : "Cần cập nhật thông tin"
         },
         validationSchema: Yup.object().shape({
             fullname: Yup.string().min(6, 'Họ và tên người dùng phải dài hơn 6 kí tự.').required('Họ và tên không được bỏ trống'),
             email: Yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
             address: Yup.string(),
-            phone: Yup.string().min(10).max(13)
+            phone: Yup.string().min(10).max(13),
         }),
         onSubmit: (values) => {
             const { fullname, email } = values
@@ -97,7 +97,7 @@ const ProfileShow = () => {
 
     }
     return (
-        <Box display='flex' justifyContent='center' alignItems='center' width='1400px' margin='0 auto' height='100%'>
+        <Box display='flex' justifyContent='center' alignItems='center' width='1200px' margin='0 auto' height='100%'>
             <Stack gap={3}>
                 <Box>
                     <Typography component='h1' variant='h4'>

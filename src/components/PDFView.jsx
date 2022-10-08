@@ -29,7 +29,7 @@ const PDFView = ({ pdf }) => {
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
             <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-                <Page size="A2" pageNumber={pageNumber} sx={{ width: '100%' }} />
+                <Page size="A4" pageNumber={pageNumber} sx={{ width: '100%' }} />
             </Document>
 
 

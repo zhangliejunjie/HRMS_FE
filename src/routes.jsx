@@ -31,7 +31,8 @@ export default function Router() {
             children: [
                 {
                     path: '/profile',
-                    element: <Dashboard />
+                    element: <Dashboard />,
+
                 }
             ]
         }

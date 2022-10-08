@@ -7,6 +7,7 @@ import {
   getAuthHeader,
   removeTokenCookie,
 } from "../../utils/tool";
+import { getAllCandidate } from "./candidateSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
 
@@ -38,8 +39,11 @@ export const login = createAsyncThunk(
       );
 
       const { member, token } = res.data;
+      const { id } = member;
+      console.log(id);
       if (token) {
-        await thunkAPI.dispatch(success("Đăng nhập thành công"));
+        thunkAPI.dispatch(success("Đăng nhập thành công"));
+        thunkAPI.dispatch(getAllCandidate({ id }));
       }
 
       return { member, token };
@@ -180,6 +184,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.member = initialState.member;
       state.auth = false;
+      state.token = null;
     },
   },
 });

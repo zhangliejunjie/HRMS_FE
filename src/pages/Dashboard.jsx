@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Drawer, Toolbar, Divider, List, ListItem, Box, ListItemIcon, ListItemText, ListItemButton, Typography, AppBar, Tabs, Tab } from '@mui/material'
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { Divider, Box, Typography, Tabs, Tab } from '@mui/material'
+import { Link } from 'react-router-dom'
 import { motion, useIsPresent } from 'framer-motion'
 import PropTypes from 'prop-types'
 import ProfileShow from '../components/ProfileShow';
+import ResumeProfileShow from '../components/ResumeProfileShow';
 import Loader from '../components/Loader'
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -19,7 +19,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    <Box sx={{ p: 0 }}>{children}</Box>
                 </Box>
             )}
         </div>
@@ -54,20 +54,21 @@ const Dashboard = () => {
     };
     return (
         <Box
-            sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '800px' }}
+            sx={{ flexGrow: 1, bgcolor: '#ffffff', display: 'flex', height: '800px' }}
         >
             <Tabs
+
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, borderColor: 'divider' }}
+                sx={{ borderRight: 1, borderColor: 'divider', padding: '0rem' }}
             >
                 <Tab label="Thông tin chungg" {...a11yProps(0)} />
-                <Divider />
+
                 <Tab label="Kết quả phỏng vấn" {...a11yProps(1)} />
-                <Divider />
+
                 <Tab label="CV" {...a11yProps(2)} />
 
             </Tabs>
@@ -75,13 +76,12 @@ const Dashboard = () => {
                 <ProfileShow />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                {/* <Loader /> */}
-                asd
+                <ResumeProfileShow />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                {/* <Loader /> */}
-                sdf
+
             </TabPanel>
+
             <motion.div
                 initial={{ scaleX: 1 }}
                 animate={{ scaleX: 0, transition: { duration: 0.5, ease: "circOut" } }}

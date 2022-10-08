@@ -10,13 +10,13 @@ import { userIsAuth } from './store/reducers/userSlice';
 import { auth } from './store/reducers/userSlice'
 import { showToast } from './utils/tool'
 import { getJobList } from './store/reducers/jobSlice'
+import { getAllCandidate } from './store/reducers/candidateSlice';
 function App() {
   const notification = useSelector(state => state.notification)
 
   const dispatch = useDispatch()
   useEffect(() => {
     const res = dispatch(getJobList())
-
   }, [dispatch])
   useDidMountEffect(() => {
     if (notification && notification.error) {
