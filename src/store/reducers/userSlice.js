@@ -19,7 +19,7 @@ export const logout = createAsyncThunk(
       // localStorage.removeItem('')
       storage.removeItem("persist:root");
 
-      await thunkAPI.dispatch(success("Good bye"));
+      thunkAPI.dispatch(success("Good bye"));
     } catch (error) {
       await thunkAPI.dispatch(error(error.message));
     }
@@ -44,12 +44,13 @@ export const login = createAsyncThunk(
       if (token) {
         thunkAPI.dispatch(success("Đăng nhập thành công"));
         thunkAPI.dispatch(getAllCandidate({ id }));
+        // thunkAPI.
       }
 
       return { member, token };
     } catch (err) {
       console.log(err);
-      await thunkAPI.dispatch(error(err.response.data.message));
+      thunkAPI.dispatch(error(err.response.data.message));
       // reject("Error with user login");
     }
   }
@@ -86,11 +87,16 @@ export const register = createAsyncThunk(
 export const update = createAsyncThunk(
   "user/update",
   async (params, thunkAPI) => {
+    // console.log(params);
     const res = await axios.patch(
       "http://localhost:8000/api/member/profile",
       params.data,
-      { headers: { Authorization: `Bearer ${params.token}` } }
+      {
+        headers: { Authorization: `Bearer ${params.token}` },
+      }
     );
+
+    // console.log(res.data);
     return res.data;
   }
 );
@@ -166,7 +172,7 @@ const userSlice = createSlice({
     },
     [update.rejected]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      state.error = action.payload;
     },
     [update.fulfilled]: (state, action) => {
       state.loading = false;

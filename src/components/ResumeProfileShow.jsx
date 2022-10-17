@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 // import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/icons-material'
-import { useSelector } from 'react-redux'
-import { TableContainer, TableCell, TableBody, Table, TableRow, TableHead, Paper } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
+import { TableContainer, TableCell, TableBody, Table, TableRow, TableHead, Paper, Button, Typography } from '@mui/material'
 // import SearchBar from 'material-ui-search-bar'
 
 import { styled, alpha } from '@mui/material/styles';
+import { getAllCandidate } from '../store/reducers/candidateSlice';
 
 
 
@@ -30,6 +31,11 @@ const Search = styled('div')(({ theme }) => ({
 
 const ResumeProfileShow = () => {
     const { candidates } = useSelector(state => state.candidate)
+    const { member } = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    const { id } = member
+    console.log(id);
+    // dispatch(getAllCandidate({ id }))
     const [rows, setRows] = useState(candidates)
     const [search, setSearch] = useState("")
     const requestSearch = (searchValue) => {
@@ -40,7 +46,11 @@ const ResumeProfileShow = () => {
         setSearch("");
         requestSearch(search);
     };
-
+    useEffect(() => {
+        const { id } = member
+        console.log(id);
+        dispatch(getAllCandidate({ id }))
+    }, [])
     console.log(candidates);
     return (
         <div>
@@ -73,7 +83,9 @@ const ResumeProfileShow = () => {
                                         <button><a href={candidate.resume_url} target="_blank">Your CV</a></button>
                                     </TableCell>
                                     <TableCell>
-                                        {candidate.applied_status}
+                                        <Typography variant="ghost" color={candidate.applied_status === 'Approve' ? 'green' : candidate.applied_status === 'Reject' ? 'error' : null}>
+                                            {candidate.applied_status}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                             ))

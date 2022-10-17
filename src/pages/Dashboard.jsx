@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Divider, Box, Typography, Tabs, Tab } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { motion, useIsPresent } from 'framer-motion'
@@ -6,6 +6,8 @@ import PropTypes from 'prop-types'
 import ProfileShow from '../components/ProfileShow';
 import ResumeProfileShow from '../components/ResumeProfileShow';
 import Loader from '../components/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllCandidate } from '../store/reducers/candidateSlice'
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -49,9 +51,15 @@ function a11yProps(index) {
 const Dashboard = () => {
     const [value, setValue] = useState(0);
     const isPresent = useIsPresent();
+    const dispatch = useDispatch()
+    const { auth, member } = useSelector((state) => state.user)
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    useEffect(() => {
+        const { id } = member
+        dispatch(getAllCandidate({ id }))
+    }, [dispatch])
     return (
         <Box
             sx={{ flexGrow: 1, bgcolor: '#ffffff', display: 'flex', height: '800px' }}
@@ -67,7 +75,7 @@ const Dashboard = () => {
             >
                 <Tab label="Thông tin chungg" {...a11yProps(0)} />
 
-                <Tab label="Kết quả phỏng vấn" {...a11yProps(1)} />
+                <Tab label="Kết quả phỏng vấn" />
 
                 <Tab label="CV" {...a11yProps(2)} />
 

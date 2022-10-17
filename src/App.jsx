@@ -30,7 +30,7 @@ function App() {
       showToast('success', msg)
       // dispatch(clearNotification())
     }
-  }, [notification.error, notification.success, dispatch])
+  }, [notification])
 
 
 

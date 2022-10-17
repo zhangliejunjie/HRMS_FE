@@ -9,10 +9,12 @@ import Job from './pages/Job';
 import Dashboard from './pages/Dashboard';
 import AuthGuard from './hoc/AuthGuard';
 import PrivateRoute from './hoc/PrivateRoute';
+import ResumeProfileShow from './components/ResumeProfileShow';
+import ProfileShow from './components/ProfileShow';
 export default function Router() {
 
     const member = useSelector(state => state.user)
-    console.log(member);
+    // console.log(member);
     const element = useRoutes([
         {
             path: '/',
@@ -30,10 +32,10 @@ export default function Router() {
             element: <PrivateRoute />,
             children: [
                 {
-                    path: '/profile',
+                    path: '/dashboard',
                     element: <Dashboard />,
+                },
 
-                }
             ]
         }
     ])

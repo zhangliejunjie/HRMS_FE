@@ -50,12 +50,14 @@ const ProfileShow = () => {
             phone: Yup.string().min(10).max(13),
         }),
         onSubmit: (values) => {
-            const { fullname, email } = values
+            const { fullname, email, address, phone } = values
 
             const params = {
                 data: {
                     fullname,
                     email,
+                    address,
+                    phone,
                     avatar: image
                 },
                 token: token

@@ -148,7 +148,7 @@ const Header = () => {
                                 >
                                     <MenuItem>
                                         <Avatar />
-                                        <Link to='/profile'>Profile</Link>
+                                        <Link to='/dashboard'>Profile</Link>
                                     </MenuItem>
                                     <Divider />
                                     <MenuItem>

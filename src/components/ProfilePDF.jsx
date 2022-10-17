@@ -46,7 +46,7 @@ const ProfilePDF = ({ member, token }) => {
             dispatch(success("Upload CV thành công"))
         }).catch(err => console.log(err))
     }
-    console.log(member);
+    // console.log(member);
     return (
         <Box mt={3} sx={{ width: '100%' }}>
             {

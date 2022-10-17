@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import JobCard from '../components/JobCard'
-import { Pagination, Stack, Button } from '@mui/material'
+import { Pagination, Stack, Button, Box } from '@mui/material'
 import { Modal, ModalClose, Typography, ModalDialog } from '@mui/joy';
-
+import axios from 'axios';
 import bg from '../assets/utils/bg.png'
 import MyButton from '../components/MyButton'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getJobList } from "../store/reducers/jobSlice"
 import Loader from '../components/Loader'
 import usePagination from '../hooks/usePagination';
+import { createCandidate } from '../store/reducers/candidateSlice';
+import { error } from '../store/reducers/notificationSlice';
 // const jobList = [
 //     {
 //         id: 'j01',
@@ -91,15 +93,23 @@ const Job = () => {
     const nav = useNavigate()
 
     const { jobs } = useSelector(state => state.job)
-    const { auth } = useSelector(state => state.user)
+    const { auth, member } = useSelector(state => state.user)
 
+
+    // const 
     const [openModal, setOpenModal] = useState(false)
+
     const [page, setPage] = useState(1)
     const jobPerPage = 4;
+
+
     const count = Math.ceil(jobs.length / jobPerPage)
     const data = usePagination(jobs, jobPerPage)
     const [jobList, setJobList] = useState(data.currentData())
     const [filter, setFilter] = useState(initFilter)
+    const [pdfURL, setPdfURL] = useState("")
+
+
     const handleChange = (e, p) => {
 
         setPage(p);
@@ -113,12 +123,49 @@ const Job = () => {
     }, [jobs])
 
     function handleClickApply() {
-        if (!auth) {
+        setOpenModal(true)
+    }
 
-            setOpenModal(true)
-            return
+    const handleChangeSubmitCV = async (files) => {
+        const selectedFile = files[0]
+
+
+        if (selectedFile) {
+            let reader = new FileReader()
+
+            reader.readAsDataURL(selectedFile)
+            reader.onload = (e) => {
+                // setPdf(e.target.result)
+            }
+
+            const formData = new FormData()
+            formData.append("file", selectedFile)
+            formData.append("upload_preset", "hrms_client")
+
+
+            const { data } = await axios.post("https://api.cloudinary.com/v1_1/sangtran127/image/upload", formData)
+
+            setPdfURL(data.url)
         }
-        alert('applied')
+        // alert(selectedFile)
+    }
+    const handleSubmitJob = (id) => {
+        // member: params.member,
+        // my_resume_url: params.my_resume_url,
+        // job_id: params.job_id,
+        const job_id = id;
+        const my_resume_url = pdfURL ? pdfURL : null
+        if (!member.current_resume_url && !pdfURL) {
+            dispatch(error('You need to provide your CV profile first'));
+        }
+        if (!member.phone) {
+            dispatch(error('You need to provide your phone first'))
+        }
+        // alert(my_resume_url);
+        dispatch(createCandidate({ member, job_id, my_resume_url }))
+        // alert(id)
+        // alert(id)
+        // console.log(id);
     }
     return (
         <>
@@ -140,6 +187,7 @@ const Job = () => {
                             {
                                 jobList ? data.currentData().map((job) => (
                                     <JobCard
+                                        auth={auth}
                                         id={job.id}
                                         key={job.id}
                                         name={job.name}
@@ -151,6 +199,10 @@ const Job = () => {
                                         type={job.experience}
                                         isRemote={job.isRemote}
                                         handleClick={handleClickApply}
+                                        openModal={openModal}
+                                        onClose={() => setOpenModal(false)}
+                                        handleChangeInputCV={handleChangeSubmitCV}
+                                        handleSubmitJob={handleSubmitJob}
                                     />
                                 )) : <Loader />
                             }
@@ -164,37 +216,7 @@ const Job = () => {
                     </div>
                 </div>
             </div>
-            <Modal open={openModal} onClose={() => setOpenModal(false)}>
-                <ModalDialog
-                    color="success"
-                    variant="outlined"
 
-                    sx={{
-                        maxWidth: 500,
-                        borderRadius: 'sm',
-                        p: 5,
-                        boxShadow: 'lg',
-                        bgcolor: '#ffffff'
-                    }}
-                >
-                    <ModalClose
-                    />
-                    <Typography
-                        component="h2"
-                        id="modal-title"
-                        level="h4"
-                        textColor="inherit"
-                        fontWeight="lg"
-                        mb={1}
-                    >
-                        Bạn cần phải đăng nhập hệ thống để ứng tuyển
-                    </Typography>
-                    <Stack>
-                        <Button sx={{ ml: 'auto' }} color="success" onClick={() => nav('/auth')}>Đăng nhập</Button>
-                    </Stack>
-                </ModalDialog>
-
-            </Modal>
         </>
     )
 }
