@@ -148,7 +148,6 @@ export default function ResultStepper({ step = 0 }) {
             <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
                 {steps.map((label) => (
                     <Step key={label}>
-                        <p style={{ textAlign: 'center' }}>a</p>
                         <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
                     </Step>
                 ))}

@@ -32,6 +32,7 @@ const Search = styled('div')(({ theme }) => ({
 
 const ResumeProfileShow = () => {
     const { candidates } = useSelector(state => state.candidate)
+    const candidateApprove = candidates.find(candidate => candidate.applied_status === 'Approve')
     const { member } = useSelector(state => state.user)
     const dispatch = useDispatch()
     const { id } = member
@@ -103,7 +104,8 @@ const ResumeProfileShow = () => {
             </TableContainer>
             <Box mt={3}>
                 <Typography component='h1' variant='h5' mb={3}>Overall Status</Typography>
-                <ResultStepper step={0} />
+                <Typography component='h2' variant='h6'>{candidateApprove?.job_name}</Typography>
+                <ResultStepper step={1} />
             </Box>
         </Box>
     )

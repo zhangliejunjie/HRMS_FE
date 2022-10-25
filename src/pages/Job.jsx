@@ -190,7 +190,7 @@ const Job = () => {
 
         setPage(p);
         data.jump(p);
-        // setJobList(data.currentData())
+
     };
 
     useEffect(() => {
@@ -232,29 +232,24 @@ const Job = () => {
             setPdfURL(data.url)
             console.log(pdfURL);
         }
-        // alert(selectedFile)
+
     }
     const handleSubmitJob = (id) => {
-        console.log(id)
-        // member: params.member,
-        // my_resume_url: params.my_resume_url,
-        // job_id: params.job_id,
+
         const job_id = id;
         const my_resume_url = pdfURL ? pdfURL : null
         if (!member.current_resume_url && !pdfURL) {
             dispatch(error('You need to provide your CV profile first'));
+            return;
         }
         if (!member.phone) {
             dispatch(error('You need to provide your phone first'))
+            return;
         }
-        // alert(my_resume_url);
-        dispatch(createCandidate({ member, job_id, my_resume_url }))
-        // dispatch()
-        // window.location.reload(false);
 
-        // alert(id)
-        // alert(id)
-        // console.log(id);
+        dispatch(createCandidate({ member, job_id, my_resume_url }))
+
+
 
     }
     const handleChangeSearch = (e) => {
