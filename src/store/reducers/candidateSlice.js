@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { getJobList } from "./jobSlice";
 import { success, error } from "./notificationSlice";
+import { addResume } from "./resumeSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 const initialState = {
   candidates: [],
@@ -19,9 +20,17 @@ export const createCandidate = createAsyncThunk(
         my_resume_url: params.my_resume_url,
         job_id: params.job_id,
       })
-      .then(() => {
+      .then((res) => {
+        console.log(res);
         thunkAPI.dispatch(success("Apply successfully"));
-        thunkAPI.dispatch(getJobList());
+        // thunkAPI.dispatch(getJobList());
+        thunkAPI.dispatch(
+          addResume({
+            job_id: params.job_id,
+            cv_url: params.my_resume_url,
+          })
+        );
+        thunkAPI.dispatch(getAllCandidate({ id: params.member.id }));
       })
       .catch((err) => {
         thunkAPI.dispatch(error(err.response.data.message));
@@ -45,14 +54,13 @@ export const createCandidate = createAsyncThunk(
 export const getAllCandidate = createAsyncThunk(
   "candidate/getAllCandidate",
   async (params, thunkAPI) => {
-    console.log(params);
     const res = await axios.post(
       "http://localhost:8000/api/candidate/memberID",
       {
         id: params.id,
       }
     );
-    console.log(res.data);
+
     return res.data;
   }
 );
@@ -67,6 +75,7 @@ export const candidateSlice = createSlice({
     [getAllCandidate.rejected]: (state, action) => {
       state.loading = false;
       state.error = true;
+      state.candidates = [];
     },
     [getAllCandidate.fulfilled]: (state, action) => {
       state.loading = false;

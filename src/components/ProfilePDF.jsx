@@ -66,7 +66,7 @@ const ProfilePDF = ({ member, token }) => {
                     onChange={(event) => handleChange(event.target.files)}
                 />
 
-                <Button onClick={handleSubmitPDF}>Nộp CV</Button>
+                <Button onClick={handleSubmitPDF}>Submit</Button>
             </Stack>
         </Box>
     )

@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import JobCard from '../components/JobCard'
-import { Pagination, Stack, Button, Box } from '@mui/material'
+import { Pagination, Stack, Button, Box, TextField } from '@mui/material'
 import { Modal, ModalClose, Typography, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import bg from '../assets/utils/bg.png'
+import SearchIcon from '@mui/icons-material/Search';
+import { styled, alpha } from '@mui/material/styles';
+import CheckBox from '../components/CheckBox';
 import MyButton from '../components/MyButton'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getJobList } from "../store/reducers/jobSlice"
 import Loader from '../components/Loader'
 import usePagination from '../hooks/usePagination';
-import { createCandidate } from '../store/reducers/candidateSlice';
-import { error } from '../store/reducers/notificationSlice';
+import { createCandidate, getAllCandidate } from '../store/reducers/candidateSlice';
+import { error, success } from '../store/reducers/notificationSlice';
+
 // const jobList = [
 //     {
 //         id: 'j01',
@@ -81,12 +85,38 @@ import { error } from '../store/reducers/notificationSlice';
 //     }
 
 // ]
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+
+const jobExperienced = [
+    {
+        id: 'experienced',
+        name: 'Experienced'
+    },
+    {
+        id: 'fresher',
+        name: 'Fresher'
+    },
+    {
+        id: 'intern',
+        name: 'Intern'
+    }
+]
+
 
 const Job = () => {
 
     const initFilter = {
-        type: [],
-        team: [],
+        category: [],
+        experience: []
     }
 
     const dispatch = useDispatch()
@@ -94,21 +124,67 @@ const Job = () => {
 
     const { jobs } = useSelector(state => state.job)
     const { auth, member } = useSelector(state => state.user)
-
+    const { categories } = useSelector(state => state.category)
 
     // const 
-    const [openModal, setOpenModal] = useState(false)
+
 
     const [page, setPage] = useState(1)
     const jobPerPage = 4;
 
 
     const count = Math.ceil(jobs.length / jobPerPage)
-    const data = usePagination(jobs, jobPerPage)
-    const [jobList, setJobList] = useState(data.currentData())
+
+    const [jobList, setJobList] = useState(jobs)
     const [filter, setFilter] = useState(initFilter)
     const [pdfURL, setPdfURL] = useState("")
+    const [filterTrigger, setFilterTrigger] = useState(false)
+    const [textSearch, setTextSearch] = useState("")
+    let data = usePagination(jobList, jobPerPage)
+    const filterSelect = (type, checked, item) => {
+        if (checked) {
+            switch (type) {
+                case "category":
+                    setFilter({ ...filter, category: [...filter.category, item] })
+                    // console.log({ ...filter, category: [...filter.category, item] });
+                    break
+                case "experience":
+                    setFilter({ ...filter, experience: [...filter.experience, item] })
+                    break
+            }
+        } else {
+            switch (type) {
+                case "category":
+                    const newCategory = filter.category.filter(e => e !== item)
+                    setFilter({ ...filter, category: newCategory })
+                    // console.log({ ...filter, category: newCategory });
+                    break
+                case "experience":
+                    const newExperience = filter.experience.filter(e => e !== item)
+                    setFilter({ ...filter, experience: newExperience })
+                    break
+            }
+        }
+    }
 
+    const clearFilter = () => {
+        setFilter(initFilter)
+    }
+    const updateJob = useCallback(() => {
+        let temp = jobs;
+        if (filter.category.length > 0) {
+            temp = temp.filter(e => filter.category.includes(e.category))
+        }
+        if (filter.experience.length > 0) {
+            console.log(temp);
+            temp = temp.filter(
+                (e) => filter.experience?.includes(e.experience)
+            )
+        }
+
+        setJobList(temp)
+        setFilterTrigger(true)
+    }, [filter])
 
     const handleChange = (e, p) => {
 
@@ -117,16 +193,24 @@ const Job = () => {
         // setJobList(data.currentData())
     };
 
+    useEffect(() => {
+        updateJob()
+
+    }, [filter])
 
     useEffect(() => {
-        setJobList(jobs)
-    }, [jobs])
+        dispatch(getJobList());
+    }, [])
 
-    function handleClickApply() {
-        setOpenModal(true)
-    }
+    useEffect(() => {
+        const { id } = member
+        // log
+
+        dispatch(getAllCandidate({ id }))
+    }, [dispatch])
 
     const handleChangeSubmitCV = async (files) => {
+        console.log(files);
         const selectedFile = files[0]
 
 
@@ -146,10 +230,12 @@ const Job = () => {
             const { data } = await axios.post("https://api.cloudinary.com/v1_1/sangtran127/image/upload", formData)
 
             setPdfURL(data.url)
+            console.log(pdfURL);
         }
         // alert(selectedFile)
     }
     const handleSubmitJob = (id) => {
+        console.log(id)
         // member: params.member,
         // my_resume_url: params.my_resume_url,
         // job_id: params.job_id,
@@ -163,33 +249,122 @@ const Job = () => {
         }
         // alert(my_resume_url);
         dispatch(createCandidate({ member, job_id, my_resume_url }))
+        // dispatch()
+        // window.location.reload(false);
+
         // alert(id)
         // alert(id)
         // console.log(id);
+
+    }
+    const handleChangeSearch = (e) => {
+        setTextSearch(String(e.target.value).toLowerCase())
+        let temp = jobList.filter((job) => job.name.toLowerCase().includes(textSearch))
+        setJobList(temp)
     }
     return (
         <>
             <div className="job">
+                <div className="job-search" style={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}>
+                    <TextField id="outlined-basic"
+                        variant="outlined"
+                        onChange={handleChangeSearch}
+                        label="Search"
+                        sx={{
+                            background: '#ffffff',
+                            width: '80%',
+                            borderRadius: '10px',
+                            // margin: '1rem 0 0 1rem'
+                            marginTop: '2rem'
+                        }} >
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                    </TextField>
+
+                </div>
                 <div className='job-container'
                     style={{
                         // backgroundImage: `url(${bg})`
+                        marginTop: '0rem',
+                        display: 'flex',
+                        alignItems: 'flex-start',
                     }}
                 >
-                    <div className="job-container__left">
-                        <h1>Job  Openings</h1>
-                        <Typography variant='h5'>Let's find a suitable position to start your
-                            Fresher journey with FCode!
-                        </Typography>
-                        <MyButton content={"Tìm việc"} />
+                    <div className="job-container__left" style={{ height: '100%' }}>
+                        <Stack spacing={3}>
+                            <h1>Job  Openings</h1>
+                            <Typography variant='h4'>Let's find a suitable position to start your
+                                Fresher journey with FCode!
+                            </Typography>
+                            <Box>
+                                <Stack className='catalog' spacing={2}>
+                                    <Stack className='catalog__filter' spacing={1}>
+                                        <div className="catalog__filter__close">
+                                            <i className="bx bx-left-arrow-alt"></i>
+                                        </div>
+                                        <div className="catalog__filter__widget">
+                                            <div className="catalog__filter__widget__title">
+
+                                                <Typography variant='h2' component='h2'>Category list</Typography>
+                                            </div>
+                                            <Box className="catalog__filter__widget__content" mt={2}>
+                                                <Typography variant='h3' component='h3'>Job type:</Typography>
+                                                {
+                                                    categories.map((category) => (
+                                                        <div>
+                                                            <CheckBox
+                                                                label={category.name}
+                                                                onChange={(input) => {
+                                                                    console.log(input.checked);
+                                                                    filterSelect("category", input.checked, category.name)
+                                                                }}
+                                                                checked={filter.category.includes(category.name)}
+                                                            />
+                                                        </div>
+                                                    ))
+                                                }
+                                            </Box>
+                                        </div>
+                                        <div className="catalog__filter__widget" mt={3}>
+
+                                            <Box className="catalog__filter__widget__content" mt={2}>
+                                                <Typography variant='h3' component='h3'>Job Experienced:</Typography>
+
+                                                {
+                                                    jobExperienced.map((job) => (
+                                                        <div>
+                                                            <CheckBox label={job.name}
+                                                                onChange={(input) => {
+                                                                    console.log(input.checked);
+                                                                    filterSelect("experience", input.checked, job.name)
+                                                                }}
+                                                                checked={filter.experience.includes(job.name)}
+                                                            />
+                                                        </div>
+                                                    ))
+                                                }
+                                            </Box>
+                                        </div>
+                                    </Stack>
+                                </Stack>
+
+                            </Box>
+                        </Stack>
+                        {/* <MyButton content={"Tìm việc"} /> */}
                     </div>
                     <div className="job-container__right">
+                        <Typography textAlign={'start'} variant='h4' component='h4' mb={1}>Total: {jobList.length}</Typography>
                         <div className="job-container__right__job-card">
                             {
-                                jobList ? data.currentData().map((job) => (
+                                jobList ? data.currentData().slice().sort((a, b) => (a.name > b.name) ? 1 : -1).map((job, index) => (
                                     <JobCard
                                         auth={auth}
                                         id={job.id}
-                                        key={job.id}
+                                        key={index}
                                         name={job.name}
                                         quantiy={job.quantity}
                                         salary={job.salary}
@@ -198,9 +373,6 @@ const Job = () => {
                                         team={job.category}
                                         type={job.experience}
                                         isRemote={job.isRemote}
-                                        handleClick={handleClickApply}
-                                        openModal={openModal}
-                                        onClose={() => setOpenModal(false)}
                                         handleChangeInputCV={handleChangeSubmitCV}
                                         handleSubmitJob={handleSubmitJob}
                                     />

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 // import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/icons-material'
 import { useSelector, useDispatch } from 'react-redux'
-import { TableContainer, TableCell, TableBody, Table, TableRow, TableHead, Paper, Button, Typography } from '@mui/material'
+import { TableContainer, TableCell, TableBody, Table, TableRow, TableHead, Paper, Box, Typography } from '@mui/material'
+import { Button } from '@mui/joy';
 // import SearchBar from 'material-ui-search-bar'
 
 import { styled, alpha } from '@mui/material/styles';
 import { getAllCandidate } from '../store/reducers/candidateSlice';
-
+import ResultStepper from './ResultStepper';
 
 
 
@@ -53,10 +54,13 @@ const ResumeProfileShow = () => {
     }, [])
     console.log(candidates);
     return (
-        <div>
-
+        <Box style={{
+            width: '100%',
+            padding: '3rem'
+        }}>
+            <Typography component='h1' variant='h5' mb={3}>CV Result</Typography>
             {/* <Search /> */}
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ width: '100%' }}>
                 <Table sx={{ minWidth: 650 }}>
                     <TableHead>
                         <TableRow>
@@ -77,13 +81,17 @@ const ResumeProfileShow = () => {
                             rows?.map((candidate) => (
                                 <TableRow>
                                     <TableCell>
-                                        {candidate.job_name}
+                                        <Typography variant='h6'>
+                                            {candidate.job_name}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <button><a href={candidate.resume_url} target="_blank">Your CV</a></button>
+                                        <Button variant='outlined' color='success'>
+                                            <a href={candidate.resume_url} target="_blank">Your CV</a>
+                                        </Button>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography variant="ghost" color={candidate.applied_status === 'Approve' ? 'green' : candidate.applied_status === 'Reject' ? 'error' : null}>
+                                        <Typography variant="button" color={candidate.applied_status === 'Approve' ? 'green' : candidate.applied_status === 'Reject' ? 'error' : null}>
                                             {candidate.applied_status}
                                         </Typography>
                                     </TableCell>
@@ -93,7 +101,11 @@ const ResumeProfileShow = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
+            <Box mt={3}>
+                <Typography component='h1' variant='h5' mb={3}>Overall Status</Typography>
+                <ResultStepper step={0} />
+            </Box>
+        </Box>
     )
 
 }

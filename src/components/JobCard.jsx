@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom';
 import { Divider, Chip, Stack, Button, Box } from '@mui/material'
 import { Modal, ModalClose, Typography, ModalDialog } from '@mui/joy';
-import { useSelector } from 'react-redux';
-const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later', team, type, isRemote, handleClick, openModal, auth, onClose, handleChangeInputCV, handleSubmitJob }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllCandidate } from '../store/reducers/candidateSlice';
+import { getJobList } from '../store/reducers/jobSlice';
+const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later', team, type, isRemote, auth, handleChangeInputCV, handleSubmitJob }) => {
     const nav = useNavigate()
     const { candidates } = useSelector(state => state.candidate)
+    const { member } = useSelector(state => state.user)
+    const dispatch = useDispatch()
     const jobApplied = candidates?.find((candidate) => candidate.job_name === name);
+    const [openModal, setOpenModal] = useState(false)
+
     return (
         <>
             <div className='job-card'>
@@ -38,13 +44,13 @@ const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later
                         : null}
 
                     {
-                        jobApplied ? (
+                        jobApplied && auth ? (
                             <Button color="success" variant='outlined' disabled className="job-card__bottom__apply" sx={{ ml: 'auto' }}>
                                 Already applied
                             </Button>
                         ) :
                             (
-                                <Button onClick={handleClick} color="success" variant='contained' className="job-card__bottom__apply" sx={{ ml: 'auto' }}>
+                                <Button onClick={() => setOpenModal(true)} color="success" variant='contained' className="job-card__bottom__apply" sx={{ ml: 'auto' }}>
                                     Apply now
                                 </Button>
                             )
@@ -52,7 +58,7 @@ const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later
 
                 </Stack>
             </div>
-            <Modal open={openModal} onClose={onClose} hideBackdrop>
+            <Modal open={openModal} onClose={() => setOpenModal(false)} hideBackdrop>
                 <ModalDialog
                     color="success"
                     variant="outlined"
@@ -85,12 +91,15 @@ const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later
                                         hidden
                                         id="cv-pdf-upload"
                                         type="file"
-                                        onChange={(event) => handleChangeInputCV(event.target.files)}
+                                        onChange={(event) => {
+                                            // console.log(event.target.files);
+                                            handleChangeInputCV(event.target.files)
+                                        }}
                                     />
                                     <p> <span style={{ color: 'red' }}>*</span> If you want to apply with another CV, please upload.</p>
                                 </Stack>
                                 <Stack>
-                                    <Button sx={{ ml: 'auto' }} color="success" variant='outlined' onClick={() => handleSubmitJob(id)}>Confirm</Button>
+                                    <Button sx={{ ml: 'auto' }} color="success" variant='outlined' onClick={() => { handleSubmitJob(id); setOpenModal(false) }}>Confirm</Button>
                                 </Stack>
                             </Box>
                         ) : (
@@ -118,14 +127,21 @@ const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later
     )
 }
 
+
+
+
+
+
+
+
 JobCard.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    start_date: PropTypes.string.isRequired,
+    // id: PropTypes.string.isRequired,
+    // name: PropTypes.string.isRequired,
+    // start_date: PropTypes.string.isRequired,
     // end_date: PropTypes.string.isRequired,
-    quantiy: PropTypes.number.isRequired,
-    salary: PropTypes.string,
-    handleClick: PropTypes.func.isRequired
+    // quantiy: PropTypes.number.isRequired,
+    // salary: PropTypes.string,
+    // handleClick: PropTypes.func.isRequired
     // team: PropTypes.string.isRequired,
     // type: PropTypes.oneOf(['Experienced', 'Intern', 'Fresher']).isRequired,
     // isRemote: PropTypes.bool.isRequired

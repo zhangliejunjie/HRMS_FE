@@ -1,6 +1,7 @@
 .job {
     background: rgb(230, 248, 236);
     background: radial-gradient(circle, rgba(230, 248, 236, 1) 0%, rgba(69, 206, 124, 0.7469581582633054) 100%);
+    min-height: 100vh;
     .job-container {
         max-width: 1320px;
         padding: 3rem 0;

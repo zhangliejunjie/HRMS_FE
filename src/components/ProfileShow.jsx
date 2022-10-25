@@ -103,7 +103,7 @@ const ProfileShow = () => {
             <Stack gap={3}>
                 <Box>
                     <Typography component='h1' variant='h4'>
-                        Thông tin cá nhân
+                        Personal Information
                     </Typography>
                     <Box display='flex' gap={2} mt={5}>
                         <Box className='left'>
@@ -134,6 +134,7 @@ const ProfileShow = () => {
                             />
                             <label htmlFor="avatar-image-upload">
                                 <MyButton
+
                                     variant="contained"
                                     color="primary"
                                     component="span"
@@ -141,9 +142,11 @@ const ProfileShow = () => {
                                     onClick={handleClick}
                                     sx={{
                                         color: 'white', borderRadius: '10px', padding: '1 2rem',
+                                        marginTop: '0.5rem',
                                         '&:hover': {
                                             backgroundColor: '#FBC115'
-                                        }
+                                        },
+
                                     }}
                                     content={image ? <DeleteIcon mr={2} /> : <CloudUploadIcon mr={2} />}
                                 >
@@ -216,7 +219,7 @@ const ProfileShow = () => {
                 <Divider />
                 <Box>
                     <Typography component='h1' variant='h4'>
-                        Thông tin CV
+                        Your main CV
                     </Typography>
                     <ProfilePDF member={member} token={token} />
                 </Box>

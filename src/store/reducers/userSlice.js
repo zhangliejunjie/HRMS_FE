@@ -8,6 +8,7 @@ import {
   removeTokenCookie,
 } from "../../utils/tool";
 import { getAllCandidate } from "./candidateSlice";
+import { getJobList } from "./jobSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
 
@@ -18,7 +19,7 @@ export const logout = createAsyncThunk(
       removeTokenCookie();
       // localStorage.removeItem('')
       storage.removeItem("persist:root");
-
+      localStorage.clear();
       thunkAPI.dispatch(success("Good bye"));
     } catch (error) {
       await thunkAPI.dispatch(error(error.message));
@@ -44,6 +45,7 @@ export const login = createAsyncThunk(
       if (token) {
         thunkAPI.dispatch(success("Đăng nhập thành công"));
         thunkAPI.dispatch(getAllCandidate({ id }));
+        // thunkAPI.dispatch()
         // thunkAPI.
       }
 

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import ProfileShow from '../components/ProfileShow';
 import ResumeProfileShow from '../components/ResumeProfileShow';
 import Loader from '../components/Loader'
+import CvList from '../components/CvList'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllCandidate } from '../store/reducers/candidateSlice'
 function TabPanel(props) {
@@ -18,10 +19,11 @@ function TabPanel(props) {
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
             {...other}
+            style={{ width: '100%' }}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Box sx={{ p: 0 }}>{children}</Box>
+                <Box sx={{ p: 3, width: '100%' }}>
+                    <Box sx={{ p: 0, width: '100%' }}>{children}</Box>
                 </Box>
             )}
         </div>
@@ -44,10 +46,6 @@ function a11yProps(index) {
     };
 }
 
-
-
-
-
 const Dashboard = () => {
     const [value, setValue] = useState(0);
     const isPresent = useIsPresent();
@@ -62,7 +60,7 @@ const Dashboard = () => {
     }, [dispatch])
     return (
         <Box
-            sx={{ flexGrow: 1, bgcolor: '#ffffff', display: 'flex', height: '800px' }}
+            sx={{ flexGrow: 1, bgcolor: '#ffffff', display: 'flex', height: '800px', width: '100%' }}
         >
             <Tabs
 
@@ -73,23 +71,21 @@ const Dashboard = () => {
                 aria-label="Vertical tabs example"
                 sx={{ borderRight: 1, borderColor: 'divider', padding: '0rem' }}
             >
-                <Tab label="Thông tin chungg" {...a11yProps(0)} />
+                <Tab label="General Info" {...a11yProps(0)} />
 
-                <Tab label="Kết quả phỏng vấn" />
-
-                <Tab label="CV" {...a11yProps(2)} />
-
+                <Tab label="CV List" {...a11yProps(2)} />
+                <Tab label="Result" />
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileShow />
             </TabPanel>
+
             <TabPanel value={value} index={1}>
-                <ResumeProfileShow />
+                <CvList />
             </TabPanel>
             <TabPanel value={value} index={2}>
-
+                <ResumeProfileShow />
             </TabPanel>
-
             <motion.div
                 initial={{ scaleX: 1 }}
                 animate={{ scaleX: 0, transition: { duration: 0.5, ease: "circOut" } }}

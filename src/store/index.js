@@ -14,11 +14,15 @@ import notificationReducer from "./reducers/notificationSlice";
 import storage from "redux-persist/lib/storage";
 import jobReducer from "./reducers/jobSlice";
 import candidateReducer from "./reducers/candidateSlice";
+import categoryReducer from "./reducers/categorySlice";
+import resumeReducer from "./reducers/resumeSlice";
 const rootReducer = combineReducers({
   user: userReducer,
   notification: notificationReducer,
   job: jobReducer,
   candidate: candidateReducer,
+  category: categoryReducer,
+  resume: resumeReducer,
 });
 const persistConfig = {
   key: "root",
