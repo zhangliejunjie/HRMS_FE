@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // axios
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import storage from "redux-persist/lib/storage";
 import {
   getTokenCookie,
@@ -11,7 +12,7 @@ import { getAllCandidate } from "./candidateSlice";
 import { getJobList } from "./jobSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
-
+// const p = useParams()
 export const logout = createAsyncThunk(
   "user/logout",
   async (params, thunkAPI) => {
@@ -41,7 +42,7 @@ export const login = createAsyncThunk(
 
       const { member, token } = res.data;
       const { id } = member;
-      console.log(id);
+      // console.log(id);
       if (token) {
         thunkAPI.dispatch(success("Đăng nhập thành công"));
         thunkAPI.dispatch(getAllCandidate({ id }));
@@ -102,6 +103,28 @@ export const update = createAsyncThunk(
     return res.data;
   }
 );
+//---------------reset password----------------
+export const forgotPassword = createAsyncThunk(
+  "user/forgot-password",
+  async (params, thunkAPI) => {
+
+
+    try {
+      const res = await axios.post("http://localhost:8000/api/member-auth/forgot-password", {
+        email: params.email
+      });
+      console.log(res.data);
+      thunkAPI.dispatch(success("Gửi mail thành công"));
+      return res.data
+    } catch (err) {
+      console.log(err);
+      thunkAPI.dispatch(error(err.response.data.message));
+    }
+  }
+)
+
+
+
 const initialState = {
   member: {
     id: null,
@@ -112,6 +135,7 @@ const initialState = {
     current_resume_url: null,
     status: "Inactive",
   },
+  msg: "",
   token: null,
   auth: false,
   loading: false,
@@ -193,6 +217,19 @@ const userSlice = createSlice({
       state.member = initialState.member;
       state.auth = false;
       state.token = null;
+    },
+
+    //---------------------------
+    [forgotPassword.pending]: (state) => {
+      state.loading = true;
+    },
+    [forgotPassword.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+
+    },
+    [forgotPassword.fulfilled]: (state, action) => {
+      state.loading = false;
     },
   },
 });
