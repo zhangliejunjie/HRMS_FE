@@ -11,15 +11,18 @@ import * as Yup from 'yup'
 import { errorHelper } from "../utils/tool";
 import bg from '../assets/utils/bg.png'
 import { useDispatch } from "react-redux";
+import { success, error } from "../store/reducers/notificationSlice";
 
 
 const ResetPassword = () => {
+
     const [validUrl, setValidUrl] = useState(false);
     const [password, setPassword] = useState("");
     const [msg, setMsg] = useState("");
     const [error, setError] = useState("");
     const nav = useNavigate()
     const param = useParams();
+    const dispatch = useDispatch();
     const url = `http://localhost:8000/api/member-auth/reset-password/${param.id}/${param.start}`;
     // const dispatch = useDispatch()
     useEffect(() => {
@@ -71,7 +74,11 @@ const ResetPassword = () => {
                 const { data } = await axios.post(url, { password });
                 setMsg(data.message);
                 setError("");
-                nav("/auth");
+                dispatch(success("Thay đổi password thành công"))
+                setTimeout(() => {
+                    nav("/auth");
+                }, 3000);
+
             } catch (error) {
                 if (
                     error.response &&
@@ -80,6 +87,8 @@ const ResetPassword = () => {
                 ) {
                     setError(error.response.data.message);
                     setMsg("");
+                    dispatch(error("Thay đổi password thất bại"))
+
                 }
             }
         }

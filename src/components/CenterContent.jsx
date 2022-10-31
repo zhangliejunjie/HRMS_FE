@@ -1,10 +1,16 @@
 import React from 'react'
 import '../sass/components/_centercontent.scss'
+import bg from '../assets/utils/bg.png'
 
 
 export default function CenterContent({ embedId }) {
     return (
-        <div className='center-content'>
+        <div className='center-content' style={{
+            backgroundImage: `url(${bg})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+
+        }}>
             <h2 className='center-content__text'>
                 We Celebrate Open Communication, Positive Environments, and Love for Innovation!
             </h2>

@@ -5,6 +5,7 @@ import CenterContent from '../components/CenterContent'
 
 
 import { Box, Typography } from '@mui/material'
+import CardImage from '../components/CardImage'
 const Home = () => {
     const embedId = "-XsRLyKV9_k";
     return (
@@ -12,6 +13,7 @@ const Home = () => {
             <HomeBanner />
             <SliderSection />
             <CenterContent embedId={embedId} />
+            <CardImage />
         </Box>
     )
 }
