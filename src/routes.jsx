@@ -11,6 +11,9 @@ import AuthGuard from './hoc/AuthGuard';
 import PrivateRoute from './hoc/PrivateRoute';
 import ResumeProfileShow from './components/ResumeProfileShow';
 import ProfileShow from './components/ProfileShow';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
 export default function Router() {
 
     const member = useSelector(state => state.user)
@@ -37,6 +40,14 @@ export default function Router() {
                 },
 
             ]
+        },
+        {
+            path: '/forgot-password',
+            element: <ForgotPassword />
+        },
+        {
+            path: '/reset-password/:id/:start',
+            element: <ResetPassword />
         }
     ])
     const location = useLocation();

@@ -183,7 +183,7 @@ const Access = props => {
                                     <span style={{
                                         color: '#FBC115',
                                         cursor: 'pointer'
-                                    }}> reset</span>
+                                    }} onClick={() => nav('/forgot-password')}> reset</span>
                                 </p>
 
                                 <Divider sx={{ width: '100%' }}>

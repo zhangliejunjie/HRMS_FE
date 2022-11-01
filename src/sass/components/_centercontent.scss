@@ -1,0 +1,14 @@
+.center-content {
+    display: block;
+    text-align: center;
+    min-height: 100vh;
+    // background: linear-gradient(to bottom, #4DD081 0%, #E1F7E8 100%);
+
+
+    &__text {
+        color: #0F4C81;
+        font-size: 3rem;
+        margin: 0 13rem 5rem 13rem;
+        padding-top: 50px;
+    }
+}
