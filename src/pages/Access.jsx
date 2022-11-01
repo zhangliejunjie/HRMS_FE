@@ -50,7 +50,7 @@ const Access = props => {
 
 
                 dispatch(register({ email, password, fullname })).then(
-                    nav('/')
+                    nav('/verify-account')
                 )
 
             }

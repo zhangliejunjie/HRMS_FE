@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // axios
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import storage from "redux-persist/lib/storage";
 import {
   getTokenCookie,
@@ -12,6 +12,7 @@ import { getAllCandidate } from "./candidateSlice";
 import { getJobList } from "./jobSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
+
 // const p = useParams()
 export const logout = createAsyncThunk(
   "user/logout",
@@ -80,7 +81,10 @@ export const register = createAsyncThunk(
         password: params.password,
         fullname: params.fullname,
       }
-    );
+    ).then()
+      .catch((err) => {
+        thunkAPI.dispatch(error(err.response.data.message));
+      })
     console.log(res.data);
     const { member, token } = res.data;
 
@@ -122,7 +126,27 @@ export const forgotPassword = createAsyncThunk(
     }
   }
 )
+//------------- verify code ---------------------
+export const verifyAccount = createAsyncThunk(
+  "user/verify-account",
+  async (params, thunkAPI) => {
+    try {
 
+      const res = await axios.patch("http://localhost:8000/api/member-auth/verify", {
+        email: params.email,
+        verified_code: params.verified_code
+      });
+      thunkAPI.dispatch(success("Xác thực tài khoản thành công"));
+
+      // nav('/auth')
+      return res.data
+
+    } catch (err) {
+      console.log(err);
+      thunkAPI.dispatch(error(err.response.data.message));
+    }
+  }
+)
 
 
 const initialState = {
@@ -190,8 +214,8 @@ const userSlice = createSlice({
     [register.fulfilled]: (state, action) => {
       state.loading = false;
       state.member = action.payload.member;
-      state.token = action.payload.token;
-      state.auth = true;
+      // state.token = action.payload.token;
+      // state.auth = true;
     },
     [update.pending]: (state) => {
       state.loading = true;
@@ -231,6 +255,21 @@ const userSlice = createSlice({
     [forgotPassword.fulfilled]: (state, action) => {
       state.loading = false;
     },
+    //============================
+    [verifyAccount.pending]: (state) => {
+      state.loading = true;
+    },
+    [verifyAccount.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+
+    },
+    [verifyAccount.fulfilled]: (state, action) => {
+      state.loading = false;
+      // state.member = initialState.member;
+
+    },
+
   },
 });
 

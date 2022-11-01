@@ -8,27 +8,35 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { errorHelper } from '../utils/tool';
 import MyButton from '../components/MyButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { forgotPassword } from '../store/reducers/userSlice';
+import { verifyAccount } from '../store/reducers/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { error } from '../store/reducers/notificationSlice';
 
 
 export default function () {
     const nav = useNavigate()
     const dispatch = useDispatch()
-
+    const user = useSelector(state => state.user.member)
     const formik = useFormik({
         initialValues: {
-            email: '',
+            email: user.email,
+            verified_code: '',
         },
         validationSchema: Yup.object().shape({
-            email: Yup.string().email('Email không hợp lệ').required('Email không được bỏ trống'),
+            verified_code: Yup.string()
+                .required()
+                .matches(/^[0-9]+$/, "Must be only digits")
+                .min(4, 'Must be exactly 4 digits')
+                .max(4, 'Must be exactly 4 digits')
 
         }),
         onSubmit: (values) => {
-            console.log(values);
             // alert(JSON.stringify(formik.values))
-            const { email } = values;
-            dispatch(forgotPassword({ email }))
+            const { verified_code, email } = values;
+            console.log(values)
+
+            dispatch(verifyAccount({ verified_code, email }))
+            // .then(nav('/auth'))
 
         }
     })
@@ -38,14 +46,30 @@ export default function () {
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
         }}>
-            <div className='email-form'>
+            <div className='verified_code-form'>
                 <form onSubmit={(e) => { e.preventDefault(); formik.handleSubmit(e) }}>
                     <div className='access__right__form'>
-                        <h1>Nhập email của bạn</h1>
+                        <h1>Nhập code xác thực</h1>
 
                         <TextInput
+                            name='verified_code'
+                            placeholder='verified_code has 4 digits'
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <AccountCircleIcon style={{ color: '#111111' }} />
+                                    </InputAdornment>
+                                )
+                            }}
+
+                            {...formik.getFieldProps('verified_code')}
+                            {...errorHelper(formik, 'verified_code')}
+                            onChange={formik.handleChange}
+                            value={formik.values.verified_code}
+                            color="success"
+                        />
+                        <TextInput
                             name='email'
-                            placeholder='example@gmail.com'
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -56,6 +80,7 @@ export default function () {
 
                             {...formik.getFieldProps('email')}
                             {...errorHelper(formik, 'email')}
+                            disabled
                             onChange={formik.handleChange}
                             value={formik.values.email}
                             color="success"
@@ -74,7 +99,7 @@ export default function () {
 
 
                         />
-                        <p style={{
+                        {user.status === "Active" && <p style={{
                             textAlign: 'left',
                             paddingBottom: '3rem'
                         }}>
@@ -83,7 +108,7 @@ export default function () {
                                 color: '#FBC115',
                                 cursor: 'pointer',
                             }} onClick={() => nav('/auth')}> đăng nhập</span>
-                        </p>
+                        </p>}
                     </div>
 
                 </form>
