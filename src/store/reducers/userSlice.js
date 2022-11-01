@@ -12,6 +12,7 @@ import { getAllCandidate } from "./candidateSlice";
 import { getJobList } from "./jobSlice";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 import { success, error } from "./notificationSlice";
+import { getReport } from "./reportSlice";
 // const p = useParams()
 export const logout = createAsyncThunk(
   "user/logout",
@@ -46,6 +47,7 @@ export const login = createAsyncThunk(
       if (token) {
         thunkAPI.dispatch(success("Đăng nhập thành công"));
         thunkAPI.dispatch(getAllCandidate({ id }));
+        thunkAPI.dispatch(getReport(member.id));
         // thunkAPI.dispatch()
         // thunkAPI.
       }

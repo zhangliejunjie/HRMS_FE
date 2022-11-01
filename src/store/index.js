@@ -16,6 +16,7 @@ import jobReducer from "./reducers/jobSlice";
 import candidateReducer from "./reducers/candidateSlice";
 import categoryReducer from "./reducers/categorySlice";
 import resumeReducer from "./reducers/resumeSlice";
+import reportReducer from "./reducers/reportSlice";
 const rootReducer = combineReducers({
   user: userReducer,
   notification: notificationReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   candidate: candidateReducer,
   category: categoryReducer,
   resume: resumeReducer,
+  report: reportReducer,
 });
 const persistConfig = {
   key: "root",
