@@ -73,14 +73,16 @@ export const userIsAuth = createAsyncThunk("user/auth", async () => {
 export const register = createAsyncThunk(
   "user/register",
   async (params, thunkAPI) => {
-    const res = await axios.post(
-      "http://localhost:8000/api/member-auth/register",
-      {
+    const res = await axios
+      .post("http://localhost:8000/api/member-auth/register", {
         email: params.email,
         password: params.password,
         fullname: params.fullname,
-      }
-    );
+      })
+      .then()
+      .catch((err) => {
+        thunkAPI.dispatch(error(err.response.data.message));
+      });
     console.log(res.data);
     const { member, token } = res.data;
 
@@ -107,23 +109,22 @@ export const update = createAsyncThunk(
 export const forgotPassword = createAsyncThunk(
   "user/forgot-password",
   async (params, thunkAPI) => {
-
-
     try {
-      const res = await axios.post("http://localhost:8000/api/member-auth/forgot-password", {
-        email: params.email
-      });
+      const res = await axios.post(
+        "http://localhost:8000/api/member-auth/forgot-password",
+        {
+          email: params.email,
+        }
+      );
       console.log(res.data);
       thunkAPI.dispatch(success("Gửi mail thành công"));
-      return res.data
+      return res.data;
     } catch (err) {
       console.log(err);
       thunkAPI.dispatch(error(err.response.data.message));
     }
   }
-)
-
-
+);
 
 const initialState = {
   member: {
@@ -226,7 +227,6 @@ const userSlice = createSlice({
     [forgotPassword.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.error;
-
     },
     [forgotPassword.fulfilled]: (state, action) => {
       state.loading = false;

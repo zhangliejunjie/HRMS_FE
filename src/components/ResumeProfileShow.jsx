@@ -59,7 +59,7 @@ const ResumeProfileShow = () => {
             width: '100%',
             padding: '3rem'
         }}>
-            <Typography component='h1' variant='h5' mb={3}>CV Result</Typography>
+            <Typography component='h1' variant='h5' mb={3}>ROUND 1: CV Result</Typography>
             {/* <Search /> */}
             <TableContainer component={Paper} sx={{ width: '100%' }}>
                 <Table sx={{ minWidth: 650 }}>
@@ -102,6 +102,11 @@ const ResumeProfileShow = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box mt={3}>
+                <Typography component='h1' variant='h5' mb={3}>Round 2: Interview status</Typography>
+                <Typography component='h2' variant='h6'>{candidateApprove?.job_name}</Typography>
+                <ResultStepper step={1} />
+            </Box>
             <Box mt={3}>
                 <Typography component='h1' variant='h5' mb={3}>Overall Status</Typography>
                 <Typography component='h2' variant='h6'>{candidateApprove?.job_name}</Typography>
