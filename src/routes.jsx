@@ -13,6 +13,7 @@ import ResumeProfileShow from './components/ResumeProfileShow';
 import ProfileShow from './components/ProfileShow';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import VerifyAccount from './pages/VerifyAccount';
 
 export default function Router() {
 
@@ -48,6 +49,10 @@ export default function Router() {
         {
             path: '/reset-password/:id/:start',
             element: <ResetPassword />
+        },
+        {
+            path: '/verify-account',
+            element: <VerifyAccount />
         }
     ])
     const location = useLocation();
