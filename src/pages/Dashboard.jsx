@@ -75,7 +75,7 @@ const Dashboard = () => {
                 <Tab label="General Info" {...a11yProps(0)} />
 
                 <Tab label="CV List" {...a11yProps(2)} />
-                <Tab label="CV Builder" />
+                <Tab label="Resume Builder" />
                 <Tab label="Result" />
 
             </Tabs>
@@ -87,10 +87,12 @@ const Dashboard = () => {
                 <CvList />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <ResumeProfileShow />
+                <Body />
+
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <Body />
+                <ResumeProfileShow />
+
             </TabPanel>
 
             <motion.div

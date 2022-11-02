@@ -12,6 +12,7 @@ export const getReport = createAsyncThunk(
   "report/getReport",
   async (params, thunkAPI) => {
     try {
+      console.log(params)
       const { data } = await axios.post(
         "http://localhost:8000/api/report/member",
         {
