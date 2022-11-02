@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import ReactToPrint from "react-to-print";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 import { ArrowDown } from "react-feather";
-
 import Editor from "../Editor/Editor";
 import Resume from "../Resume/Resume";
 
 import styles from "./Body.module.css";
+// import { Button } from "@mui/material";
 
 function Body() {
     const colors = ["#239ce2", "#48bb78", "#0bc5ea", "#a0aec0", "#ed8936"];
@@ -58,7 +58,20 @@ function Body() {
             detail: "",
         },
     });
-
+    const handleDownload = useReactToPrint({
+        onPrintError: (error) => console.log(error),
+        content: () => ref.current,
+        removeAfterPrint: true,
+        print: async (printIframe) => {
+            const document = printIframe.contentDocument;
+            if (document) {
+                const html = document.getElementsByTagName("html")[0];
+                console.log(html);
+                const exporter = new Html2Pdf(html);
+                await exporter.getPdf(true);
+            }
+        },
+    });
     return (
         <div className={styles.container}>
             <p className={styles.heading}>Resume Builder</p>

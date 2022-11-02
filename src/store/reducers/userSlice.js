@@ -160,6 +160,7 @@ const initialState = {
     avatar: null,
     current_resume_url: null,
     status: "Inactive",
+    other_resume_url: null
   },
   msg: "",
   token: null,

@@ -75,7 +75,7 @@ const Dashboard = () => {
                 <Tab label="General Info" {...a11yProps(0)} />
 
                 <Tab label="CV List" {...a11yProps(2)} />
-                <Tab label="CV Builder" />
+                <Tab label="Resume Builder" />
                 <Tab label="Result" />
 
             </Tabs>
@@ -86,10 +86,10 @@ const Dashboard = () => {
             <TabPanel value={value} index={1}>
                 <CvList />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={value} index={3}>
                 <ResumeProfileShow />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={value} index={2}>
                 <Body />
             </TabPanel>
 
