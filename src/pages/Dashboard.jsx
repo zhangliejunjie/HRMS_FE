@@ -9,6 +9,7 @@ import Loader from '../components/Loader'
 import CvList from '../components/CvList'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllCandidate } from '../store/reducers/candidateSlice'
+import Body from '../components/Body/Body'
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -74,7 +75,9 @@ const Dashboard = () => {
                 <Tab label="General Info" {...a11yProps(0)} />
 
                 <Tab label="CV List" {...a11yProps(2)} />
+                <Tab label="CV Builder" />
                 <Tab label="Result" />
+
             </Tabs>
             <TabPanel value={value} index={0}>
                 <ProfileShow />
@@ -86,6 +89,10 @@ const Dashboard = () => {
             <TabPanel value={value} index={2}>
                 <ResumeProfileShow />
             </TabPanel>
+            <TabPanel value={value} index={3}>
+                <Body />
+            </TabPanel>
+
             <motion.div
                 initial={{ scaleX: 1 }}
                 animate={{ scaleX: 0, transition: { duration: 0.5, ease: "circOut" } }}
