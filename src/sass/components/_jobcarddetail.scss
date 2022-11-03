@@ -1,17 +1,17 @@
-.job-card {
+.job-carddetails {
     // width: 500px;
-    background: #ffffff;
     padding: 1rem;
     // border: 1px solid black;
     box-shadow: 5px 5px 15px 0 rgb(224 224 224 / 50%);
     border-radius: 10px;
-    transition: transform .4s;
 
-    &:hover {
-        transform: scale(1.1);
+    &__line {
+        border-bottom: 1px solid #dadde1;
+        align-items: center;
+        display: flex;
+        margin: 20px 16px;
+        text-align: center
     }
-
-
 
     &__title {
         color: #4a4a4a;
