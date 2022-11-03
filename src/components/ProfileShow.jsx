@@ -79,7 +79,7 @@ const ProfileShow = () => {
         formData.append("upload_preset", "hrms_client")
         axios.post("https://api.cloudinary.com/v1_1/sangtran127/image/upload", formData).then((res) => {
             checkImg(res.data.url)
-            // console.log(res.data.url);
+            console.log(res.data.url);
         })
     }
     const cleanup = () => {

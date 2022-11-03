@@ -86,13 +86,6 @@ const Dashboard = () => {
             <TabPanel value={value} index={1}>
                 <CvList />
             </TabPanel>
-<<<<<<< HEAD
-            <TabPanel value={value} index={3}>
-                <ResumeProfileShow />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                <Body />
-=======
             <TabPanel value={value} index={2}>
                 <Body />
 
@@ -100,7 +93,6 @@ const Dashboard = () => {
             <TabPanel value={value} index={3}>
                 <ResumeProfileShow />
 
->>>>>>> dat
             </TabPanel>
 
             <motion.div

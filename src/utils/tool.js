@@ -33,3 +33,14 @@ export const removeTokenCookie = () =>
 export const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${getTokenCookie()}` } };
 };
+export const getDateOfISOWeek = (w, slot) => {
+  const y = 2022;
+  let day = Math.floor((slot - 1) / 4);
+  let simple = new Date(y, 0, 1 + (w - 1) * 7 + day);
+  let dow = simple.getDay();
+  let ISOweekStart = simple;
+  if (dow <= 4)
+    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1 + day);
+  else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay() + day);
+  return ISOweekStart;
+};
