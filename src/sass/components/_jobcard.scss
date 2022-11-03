@@ -5,6 +5,14 @@
     // border: 1px solid black;
     box-shadow: 5px 5px 15px 0 rgb(224 224 224 / 50%);
     border-radius: 10px;
+    transition: transform .4s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+
+
     &__title {
         color: #4a4a4a;
         font-weight: 600;
@@ -13,6 +21,7 @@
         line-height: 30px;
         letter-spacing: normal;
     }
+
     &__detail {
         display: flex;
         color: #909090;
@@ -23,6 +32,7 @@
         gap: 1rem;
         margin-bottom: 0;
         margin: 1rem 0;
+
         .tit {
             font-weight: 600;
             color: #413f42;

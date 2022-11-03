@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import Home from './pages/Home'
 import Access from './pages/Access';
 import Job from './pages/Job';
+import JobDetail from './pages/JobDetail';
+
 import Dashboard from './pages/Dashboard';
 import AuthGuard from './hoc/AuthGuard';
 import PrivateRoute from './hoc/PrivateRoute';
@@ -31,6 +33,10 @@ export default function Router() {
         {
             path: '/job',
             element: <Job />
+        },
+        {
+            path: '/job/:jobId',
+            element: <JobDetail />
         },
         {
             element: <PrivateRoute />,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Divider, Chip, Stack, Button, Box } from '@mui/material'
 import { Modal, ModalClose, Typography, ModalDialog } from '@mui/joy';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,8 @@ const JobCard = ({ id, name, start_date, end_date, quantiy, salary = 'Deal later
         <>
             <div className='job-card'>
                 {/* <p>{jobApplied ? 'Already applied' : null}</p> */}
-                <h3 className='job-card__title'>{name}</h3>
+                <h3 className='job-card__title'>
+                    <Link to={`/job/${id}`}>{name}</Link></h3>
                 <div className="job-card__detail">
                     <Typography>  {type}</Typography>
                     <Divider orientation="vertical" variant="fullWidth" flexItem />

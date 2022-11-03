@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import JobCard from '../components/JobCard'
-import { Pagination, Stack, Button, Box, TextField } from '@mui/material'
+import { Pagination, Stack, Button, Box, TextField, Paper } from '@mui/material'
 import { Modal, ModalClose, Typography, ModalDialog } from '@mui/joy';
 import axios from 'axios';
 import bg from '../assets/utils/bg.png'
@@ -290,65 +290,74 @@ const Job = () => {
                     }}
                 >
                     <div className="job-container__left" style={{ height: '100%' }}>
-                        <Stack spacing={3}>
-                            <h1>Job  Openings</h1>
-                            <Typography variant='h4'>Let's find a suitable position to start your
-                                Fresher journey with FCode!
-                            </Typography>
-                            <Box>
-                                <Stack className='catalog' spacing={2}>
-                                    <Stack className='catalog__filter' spacing={1}>
-                                        <div className="catalog__filter__close">
-                                            <i className="bx bx-left-arrow-alt"></i>
-                                        </div>
-                                        <div className="catalog__filter__widget">
-                                            <div className="catalog__filter__widget__title">
+                        <Box p={1.5} >
+                            <Paper sx={{ borderRadius: "12px" }}>
+                                <Box p={5}>
+                                    <Stack spacing={3}>
+                                        <h1>Job  Openings</h1>
+                                        <Typography variant='h4'>Let's find a suitable position to start your
+                                            Fresher journey with FCode!
+                                        </Typography>
+                                        <Box>
+                                            <Stack className='catalog' spacing={2}>
+                                                <Stack className='catalog__filter' spacing={1}>
+                                                    <div className="catalog__filter__close">
+                                                        <i className="bx bx-left-arrow-alt"></i>
+                                                    </div>
+                                                    <div className="catalog__filter__widget">
+                                                        <div className="catalog__filter__widget__title">
 
-                                                <Typography variant='h2' component='h2'>Category list</Typography>
-                                            </div>
-                                            <Box className="catalog__filter__widget__content" mt={2}>
-                                                <Typography variant='h3' component='h3'>Job type:</Typography>
-                                                {
-                                                    categories.map((category) => (
-                                                        <div>
-                                                            <CheckBox
-                                                                label={category.name}
-                                                                onChange={(input) => {
-                                                                    console.log(input.checked);
-                                                                    filterSelect("category", input.checked, category.name)
-                                                                }}
-                                                                checked={filter.category.includes(category.name)}
-                                                            />
+                                                            <Typography variant='h2' component='h2'>Category list</Typography>
                                                         </div>
-                                                    ))
-                                                }
-                                            </Box>
-                                        </div>
-                                        <div className="catalog__filter__widget" mt={3}>
+                                                        <Box className="catalog__filter__widget__content" mt={2}>
+                                                            <Typography variant='h3' component='h3'>Job type:</Typography>
+                                                            {
+                                                                categories.map((category) => (
+                                                                    <div>
+                                                                        <CheckBox
+                                                                            label={category.name}
+                                                                            onChange={(input) => {
+                                                                                console.log(input.checked);
+                                                                                filterSelect("category", input.checked, category.name)
+                                                                            }}
+                                                                            checked={filter.category.includes(category.name)}
+                                                                        />
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </Box>
+                                                    </div>
+                                                    <div className="catalog__filter__widget" mt={3}>
 
-                                            <Box className="catalog__filter__widget__content" mt={2}>
-                                                <Typography variant='h3' component='h3'>Job Experienced:</Typography>
+                                                        <Box className="catalog__filter__widget__content" mt={2}>
+                                                            <Typography variant='h3' component='h3'>Job Experienced:</Typography>
 
-                                                {
-                                                    jobExperienced.map((job) => (
-                                                        <div>
-                                                            <CheckBox label={job.name}
-                                                                onChange={(input) => {
-                                                                    console.log(input.checked);
-                                                                    filterSelect("experience", input.checked, job.name)
-                                                                }}
-                                                                checked={filter.experience.includes(job.name)}
-                                                            />
-                                                        </div>
-                                                    ))
-                                                }
-                                            </Box>
-                                        </div>
+                                                            {
+                                                                jobExperienced.map((job) => (
+                                                                    <div>
+                                                                        <CheckBox label={job.name}
+                                                                            onChange={(input) => {
+                                                                                console.log(input.checked);
+                                                                                filterSelect("experience", input.checked, job.name)
+                                                                            }}
+                                                                            checked={filter.experience.includes(job.name)}
+                                                                        />
+                                                                    </div>
+                                                                ))
+                                                            }
+                                                        </Box>
+                                                    </div>
+                                                </Stack>
+                                            </Stack>
+
+                                        </Box>
                                     </Stack>
-                                </Stack>
+                                </Box>
 
-                            </Box>
-                        </Stack>
+                            </Paper>
+
+                        </Box>
+
                         {/* <MyButton content={"Tìm việc"} /> */}
                     </div>
                     <div className="job-container__right">

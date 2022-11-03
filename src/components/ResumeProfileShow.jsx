@@ -8,6 +8,7 @@ import { Button } from '@mui/joy';
 import { styled, alpha } from '@mui/material/styles';
 import { getAllCandidate } from '../store/reducers/candidateSlice';
 import ResultStepper from './ResultStepper';
+import InterviewInformation from './InterviewInformation';
 
 
 
@@ -36,13 +37,15 @@ const ResumeProfileShow = () => {
     const { member } = useSelector(state => state.user)
     const dispatch = useDispatch()
     const { id } = member
-    console.log(id);
+    // console.log(id);
     // dispatch(getAllCandidate({ id }))
     const [rows, setRows] = useState(candidates)
     const [search, setSearch] = useState("")
+    const [canId, setCanID] = useState([])
     const requestSearch = (searchValue) => {
         const filterRows = candidates.filter((candidate) => candidate.job.toLowerCase().includes(searchValue.toLowerCase()))
         setRows(filterRows)
+
     }
     const cancelSearch = () => {
         setSearch("");
@@ -95,18 +98,28 @@ const ResumeProfileShow = () => {
                                         <Typography variant="button" color={candidate.applied_status === 'Approve' ? 'green' : candidate.applied_status === 'Reject' ? 'error' : null}>
                                             {candidate.applied_status}
                                         </Typography>
+                                        {/* {setCanID(candidate.id)} */}
                                     </TableCell>
+                                    {/* <TableCell>
+                                        <Typography component='h1' variant='h5' mb={3}>Round 2: Interview status</Typography>
+                                        <InterviewInformation candidateId={candidate.id} />
+                                    </TableCell> */}
                                 </TableRow>
                             ))
                         }
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box mt={3}>
-                <Typography component='h1' variant='h5' mb={3}>Round 2: Interview status</Typography>
-                <Typography component='h2' variant='h6'>{candidateApprove?.job_name}</Typography>
-                <ResultStepper step={1} />
-            </Box>
+            {
+                rows?.filter(candidate => candidate.applied_status === "Approve").map(can => (
+
+                    <Box mt={3}>
+                        <p>{
+                            console.log(rows)
+                        }</p>
+                        <Typography component='h1' variant='h5' mb={3}>Round 2: Interview status</Typography>
+                        <InterviewInformation candidateId={can.id} />
+                    </Box>))}
             <Box mt={3}>
                 <Typography component='h1' variant='h5' mb={3}>Overall Status</Typography>
                 <Typography component='h2' variant='h6'>{candidateApprove?.job_name}</Typography>
