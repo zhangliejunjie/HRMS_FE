@@ -25,7 +25,7 @@ export const logout = createAsyncThunk(
       localStorage.clear();
       thunkAPI.dispatch(success("Good bye"));
     } catch (error) {
-      await thunkAPI.dispatch(error(error.message));
+      thunkAPI.dispatch(error(error.message));
     }
   }
 );
@@ -146,7 +146,7 @@ export const verifyAccount = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.log(err);
-      thunkAPI.dispatch(error(err.response.data.message));
+      // thunkAPI.dispatch(error(err.response.data.message));
     }
   }
 );
@@ -160,7 +160,7 @@ const initialState = {
     avatar: null,
     current_resume_url: null,
     status: "Inactive",
-    other_resume_url: null
+    other_resume_url: null,
   },
   msg: "",
   token: null,

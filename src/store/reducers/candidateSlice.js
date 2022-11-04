@@ -33,7 +33,7 @@ export const createCandidate = createAsyncThunk(
         thunkAPI.dispatch(getAllCandidate({ id: params.member.id }));
       })
       .catch((err) => {
-        thunkAPI.dispatch(error(err.response.data.message));
+        // thunkAPI.dispatch(error(err.response.data.message));
       });
 
     return res.data;
@@ -79,7 +79,7 @@ export const candidateSlice = createSlice({
     },
     [getAllCandidate.fulfilled]: (state, action) => {
       state.loading = false;
-      state.error = action.error;
+      // state.error = action.error;
       state.candidates = action.payload;
     },
     // phan nay bi lap lai
