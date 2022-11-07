@@ -141,7 +141,7 @@ export const verifyAccount = createAsyncThunk(
         }
       );
       thunkAPI.dispatch(success("Xác thực tài khoản thành công"));
-
+      thunkAPI.dispatch(login())
       // nav('/auth')
       return res.data;
     } catch (err) {

@@ -21,7 +21,10 @@ export default function InterviewInformation(
 
     return (
         <>
-            {report?.map(n =>
+            {/* rows?.filter(candidate => candidate?.applied_status === "Approve").map(can => ( */}
+
+
+            {report?.filter(re => re?.status === "Pending").map(n =>
                 <Box p={5}>
                     <Paper>
                         <Box p={5}>

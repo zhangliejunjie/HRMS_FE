@@ -111,14 +111,14 @@ const ResumeProfileShow = () => {
                 </Table>
             </TableContainer>
             {
-                rows?.filter(candidate => candidate.applied_status === "Approve").map(can => (
+                rows?.filter(candidate => candidate?.applied_status === "Approve").map(can => (
 
                     <Box mt={3}>
                         <p>{
                             console.log(rows)
                         }</p>
                         <Typography component='h1' variant='h5' mb={3}>Round 2: Interview status</Typography>
-                        <InterviewInformation candidateId={can.id} />
+                        <InterviewInformation candidateId={can?.id} />
                     </Box>))}
             <Box mt={3}>
                 <Typography component='h1' variant='h5' mb={3}>Overall Status</Typography>
